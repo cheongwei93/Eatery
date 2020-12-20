@@ -6,6 +6,7 @@ import pic2 from '../../images/menu/002.jpg';
 import pic3 from '../../images/menu/003.jpg';
 import pic4 from '../../images/menu/004.jpg';
 import pic5 from '../../images/menu/005.jpg'; 
+import pic6 from '../../images/menu/006.jpg';
 
 import Menu from '../components/menuCategory';
 
@@ -49,6 +50,11 @@ class menu extends Component{
                         <Menu
                             imageSource={pic5}
                             categoryName="Yakimono"
+                        />
+
+                        <Menu
+                            imageSource={pic6}
+                            categoryName="Drinks"
                         />
 
 
