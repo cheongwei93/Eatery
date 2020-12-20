@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
+const windowWidth = Dimensions.get('window').width;
 const header = function(){
     return(
         <View style={styles.header}>
+            
             <Text style={styles.headerText}>Eatery</Text>
             <SimpleLineIcons name={'basket'} size={25} color={'#FA4B3E'} style={styles.icon}/>
             
@@ -24,7 +26,7 @@ const styles = StyleSheet.create({
         color: '#FA4B3E',
         fontSize: 20,
         position: 'absolute',
-        marginLeft: 150,
+        marginLeft: windowWidth / 2.72,
         fontWeight: 'bold',
         letterSpacing: 2
         
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
 
     },
     icon: {
-        marginLeft: 350,
+        marginLeft: windowWidth / 1.2,
         position: 'absolute',
         
     }

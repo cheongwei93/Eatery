@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 
 import { Form, Item, Input, Body, CheckBox, Button } from 'native-base';
-import FormButton from '../components/FormButton';
 import logo from '../../images/logo/text.png';
 import { color } from 'react-native-reanimated';
 import * as Animatable from 'react-native-animatable';

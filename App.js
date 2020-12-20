@@ -21,6 +21,8 @@ import homeHeader from './src/components/Header';
 
 const Stack = createStackNavigator();
 
+
+
 export default function App() {
   return (
     <NavigationContainer>
@@ -49,8 +51,10 @@ export default function App() {
         <Stack.Screen
           options={{ 
             headerShown: true,
-            headerTitle: ()=> homeHeader()
+            headerTitle: ()=> homeHeader(),
+            headerLeft: null
           }}
+          
           name='base'
           component={Base}
         />
