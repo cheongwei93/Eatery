@@ -1,80 +1,111 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, Dimensions, Alert } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Button } from 'native-base';
+import axios from 'axios';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-class register extends Component {
-    render() {
-        return (
-            <Animatable.View style={styles.container} animation="fadeIn" duration={500}>
-                <View style={styles.top}>
+const register = function({navigation}) {
 
-                </View>
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [password2, setPassword2] = useState("");
+    const [name, setName] = useState("");
 
-                <View style={styles.middle}>
-
-                </View>
-
-                <Animatable.View style={styles.bottom} animation="fadeInUpBig" delay={1000}>
-                    <Text style={styles.signup}>Sign Up</Text>
-
-                    <View style={styles.inputContainer}>
-                        <AntDesign name={"user"} size={25} color="#666666" style={styles.icon} />
-                        <TextInput
-                            placeholder="Email"
-                            numberOfLines={1}
-                            fontSize={20}
-                        />
-                    </View>
-
-                    <View style={styles.inputContainer}>
-                        <AntDesign name={"lock"} size={25} color="#666666" style={styles.icon} />
-                        <TextInput
-                            placeholder="Password"
-                            numberOfLines={1}
-                            fontSize={20}
-                        />
-                    </View>
-
-                    <View style={styles.inputContainer}>
-                        <Fontisto name={"locked"} size={23} color="#666666" style={styles.icon2} />
-                        <TextInput
-                            placeholder="Confirm Password"
-                            numberOfLines={1}
-                            fontSize={20}
-                        />
-                    </View>
-
-
-
-                    <View style={styles.inputContainer}>
-                        <FontAwesome5 name={"user-tag"} size={23} color="#666666" style={styles.icon2} />
-                        <TextInput
-                            placeholder="Name"
-                            numberOfLines={1}
-                            fontSize={20}
-                        />
-                    </View>
-
-                    <Button style={styles.button}>
-                        <Text style={styles.buttonText}>Sign Up</Text>
-                    </Button>
-
-                    <Button style={styles.backButton} onPress={()=>{this.props.navigation.navigate('login2')}}>
-                        <Text style={styles.buttonText2}>Back</Text>
-                    </Button>
-
-                </Animatable.View>
-            </Animatable.View>
-        )
+    const addUser = function(){
+        
+        if(password !== password2){
+            Alert.alert('Password not match !','Please Try Again.',[
+                {text: 'Try Again'}
+            ]);
+        }else{
+            axios.post('http://192.168.0.115:3303/user/register', {
+                email: email,
+                password: password,
+                name: name
+            }).then(()=>{
+                console.log("Success")
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+        
     }
+
+    return (
+        <Animatable.View style={styles.container} animation="fadeIn" duration={500}>
+            <View style={styles.top}>
+
+            </View>
+
+            <View style={styles.middle}>
+
+            </View>
+
+            <Animatable.View style={styles.bottom} animation="fadeInUpBig" delay={1000}>
+                <Text style={styles.signup}>Sign Up</Text>
+
+                <View style={styles.inputContainer}>
+                    <AntDesign name={"user"} size={25} color="#666666" style={styles.icon} />
+                    <TextInput
+                        placeholder="Email"
+                        numberOfLines={1}
+                        fontSize={20}
+                        onChangeText={text => setEmail(text)}
+                    />
+                </View>
+
+                <View style={styles.inputContainer}>
+                    <AntDesign name={"lock"} size={25} color="#666666" style={styles.icon} />
+                    <TextInput
+                        placeholder="Password"
+                        numberOfLines={1}
+                        fontSize={20}
+                        onChangeText={text => setPassword(text)}
+                        secureTextEntry={true}
+                    />
+                </View>
+
+                <View style={styles.inputContainer}>
+                    <Fontisto name={"locked"} size={23} color="#666666" style={styles.icon2} />
+                    <TextInput
+                        placeholder="Confirm Password"
+                        numberOfLines={1}
+                        fontSize={20}
+                        onChangeText={text => setPassword2(text)}
+                        secureTextEntry={true}
+                    />
+                </View>
+
+
+
+                <View style={styles.inputContainer}>
+                    <FontAwesome5 name={"user-tag"} size={23} color="#666666" style={styles.icon2} />
+                    <TextInput
+                        placeholder="Name"
+                        numberOfLines={1}
+                        fontSize={20}
+                        onChangeText={text => setName(text)}
+                    />
+                </View>
+
+                <Button style={styles.button} onPress={ ()=>{addUser()}}>
+                    <Text style={styles.buttonText}>Sign Up</Text>
+                </Button>
+
+                <Button style={styles.backButton} onPress={()=>navigation.navigate('login2')}>
+                    <Text style={styles.buttonText2}>Back</Text>
+                </Button>
+
+            </Animatable.View>
+        </Animatable.View>
+    )
 }
 
 const styles = StyleSheet.create({

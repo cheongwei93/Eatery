@@ -1,74 +1,95 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, Alert } from 'react-native';
 
 import { Form, Item, Input, Body, CheckBox, Button } from 'native-base';
 import logo from '../../images/logo/text.png';
 import { color } from 'react-native-reanimated';
 import * as Animatable from 'react-native-animatable';
-import { Platform } from 'react-native';
+import axios from 'axios';
 
-class login extends Component {
+const login = function ({ navigation }) {
 
-    constructor(props){
-        super(props);
-        
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [verifyLogin, setVerify] = useState("");
+
+    const verify = function(){
+        if(!email || !password){
+            Alert.alert('Please Enter Username or Password !', 'Please Try Again', [
+                {text: 'Try Again'}
+            ])
+        }else{
+            axios.post('http://192.168.0.115:3303/user/login', {
+                email: email,
+                password: password
+            }).then((res)=>{
+                if(res.data === "FALSE"){
+                    Alert.alert('Username or Password incorrect!', 'Please Try Again',[
+                        {text: 'Try Again'}
+                    ]);
+                }else{
+                    navigation.navigate('base');
+                }
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
     }
 
-    render() {
-        return (
-            
-            // container
-            <View style={styles.container}>
-                
-                {/* top side */}
-                <Animatable.View style={styles.top} animation="fadeInDownBig">
-                    <Image source={logo} style={styles.image} />
-                </Animatable.View>
-
-                {/* middle side */}
-                <Animatable.View style={styles.middle} animation="fadeInUpBig">
-
-                    <View style={styles.form}>
-                        <Text style={styles.signin}>Sign In</Text>
-                        <Form style={styles.mainform}>
-                            
-                            <Item style={styles.formItem}>
-                                <Input placeholder="Username" style={styles.Input} />
-                            </Item>
-                            <Item style={styles.formItem}>
-                                <Input placeholder="Password" style={styles.Input} secureTextEntry={true}/>
-                            </Item>
-                            <Button style={styles.button} onPress={()=>{this.props.navigation.navigate('base')}}>
-                                <Text style={styles.buttonText}>Login</Text>
-                            </Button>
-
-                            <View style={{  
-                                flexDirection: 'row',
-                                alignSelf: 'center'
-                            }}>
-                                <Text style={styles.text}>Don't have an account?</Text>
-                                
-                                <TouchableOpacity onPress={()=> this.props.navigation.navigate('register')}> 
-                                    <Text style={styles.signup}> Sign Up</Text>
-                                </TouchableOpacity>
-                            </View>
-                            
-                        </Form>
-
-                    </View>
+    return (
 
 
-                </Animatable.View>
-                
-                {/* bottom side */}
-                <View style={styles.bottom}>
+        // container
+        <View style={styles.container}>
+
+            {/* top side */}
+            <Animatable.View style={styles.top} animation="fadeInDownBig">
+                <Image source={logo} style={styles.image} />
+            </Animatable.View>
+
+            {/* middle side */}
+            <Animatable.View style={styles.middle} animation="fadeInUpBig">
+
+                <View style={styles.form}>
+                    <Text style={styles.signin}>Sign In</Text>
+                    <Form style={styles.mainform}>
+
+                        <Item style={styles.formItem}>
+                            <Input placeholder="Email" style={styles.Input} onChangeText={text => setEmail(text)} />
+                        </Item>
+                        <Item style={styles.formItem}>
+                            <Input placeholder="Password" style={styles.Input} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
+                        </Item>
+                        <Button style={styles.button} onPress={()=>{verify()}}>
+                            <Text style={styles.buttonText}>Login</Text>
+                        </Button>
+
+                        <View style={{
+                            flexDirection: 'row',
+                            alignSelf: 'center'
+                        }}>
+                            <Text style={styles.text}>Don't have an account?</Text>
+
+                            <TouchableOpacity onPress={() => navigation.navigate('register')}>
+                                <Text style={styles.signup}> Sign Up</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </Form>
 
                 </View>
-            </View>
 
-            
-        )
-    }
+
+            </Animatable.View>
+
+            {/* bottom side */}
+            <View style={styles.bottom}>
+
+            </View>
+        </View>
+
+
+    )
 }
 
 const styles = StyleSheet.create({
