@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     menuContainer: {
         height: windowsHeight / 2 - 100,
         width: windowsWidth / 2,
-        padding : 5
+        padding : 10
     },
     image: {
         height: '100%',
