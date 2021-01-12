@@ -18,6 +18,11 @@ import pic8 from '../../images/Sushi/008.jpg'
 import pic9 from '../../images/Sushi/009.jpg'
 
 class homeScreen extends Component {
+
+    constructor(props){
+        super(props)
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -60,14 +65,14 @@ class homeScreen extends Component {
                                 <FontAwesome5 name={'chair'} size={35} color='#FA4B3E'/>
                                 
                             </View>
-                            <Text style={styles.categoryBtnTxt}>Reserve</Text>
+                            <Text style={styles.categoryBtnTxt}>Order</Text>
                         </TouchableOpacity>
                         
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('Reservation')}}>
                             <View style={styles.categoryIcon}>
                                 <AntDesign name={'calendar'} size={35} color='#FA4B3E' />
                             </View>
-                            <Text style={styles.categoryBtnTxt}>Booking</Text>
+                            <Text style={styles.categoryBtnTxt}>Reservation</Text>
                         </TouchableOpacity>
                         
                         <TouchableOpacity>

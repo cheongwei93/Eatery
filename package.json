@@ -10,6 +10,7 @@
   "dependencies": {
     "@khanshamshad32/carousel": "^1.0.1",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-picker/picker": "github:react-native-picker/picker",
     "@react-navigation/bottom-tabs": "^5.11.2",
     "@react-navigation/material-bottom-tabs": "^5.3.10",
     "@react-navigation/native": "^5.8.10",

@@ -9,6 +9,7 @@ import loading from './src/screens/loadingScreen';
 import Login2 from './src/screens/login2';
 import Register from './src/screens/register';
 import Base from './src/screens/base';
+import Reservation from './src/screens/reservation';
 
 import homeHeader from './src/components/Header';
 
@@ -42,7 +43,6 @@ export default function App() {
         <Stack.Screen
           options={{
             headerShown: false,
-            headerStyle: styles.headerstyle,
           }}
           name='register'
           component={Register}
@@ -57,6 +57,26 @@ export default function App() {
           
           name='base'
           component={Base}
+        />
+
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'white'
+            },
+            headerTitleStyle: {
+              alignSelf: 'center',
+              color: '#FA4B3E',
+              fontWeight: 'bold',
+              letterSpacing: 2,
+              fontSize: 20,
+            },
+          
+          }}
+          name="Reservation"
+          component={Reservation}
+          
         />
 
         
@@ -79,5 +99,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }
 });

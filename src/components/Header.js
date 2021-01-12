@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         marginLeft: windowWidth / 2.72,
         fontWeight: 'bold',
-        letterSpacing: 2
+        letterSpacing: 2,
         
     },
     contain:{
