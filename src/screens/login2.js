@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, KeyboardAvoidingView, Alert } from 'react-native';
-
 import { Form, Item, Input, Body, CheckBox, Button } from 'native-base';
 import logo from '../../images/logo/text.png';
-import { color } from 'react-native-reanimated';
 import * as Animatable from 'react-native-animatable';
 import axios from 'axios';
+
+//AsyncStorage
+import store from '../components/AsyncStore';
 
 const login = function ({ navigation }) {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [verifyLogin, setVerify] = useState("");
 
     const verify = function(){
         if(!email || !password){
@@ -19,15 +19,19 @@ const login = function ({ navigation }) {
                 {text: 'Try Again'}
             ])
         }else{
-            axios.post('http://192.168.0.115:3303/user/login', {
+            axios.post('http://192.168.0.116:3303/user/login', {
                 email: email,
                 password: password
             }).then((res)=>{
-                if(res.data === "FALSE"){
+                if(res.data.auth === "FALSE"){
                     Alert.alert('Username or Password incorrect!', 'Please Try Again',[
                         {text: 'Try Again'}
                     ]);
-                }else{
+                    
+                }else if(res.data.auth === "TRUE"){
+                    let result = res.data.result[0].id;
+                    result = result.toString();
+                    store(result);
                     navigation.navigate('base');
                 }
             }).catch((error)=>{
@@ -35,6 +39,9 @@ const login = function ({ navigation }) {
             })
         }
     }
+
+
+
 
     return (
 
