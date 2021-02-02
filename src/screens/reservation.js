@@ -26,18 +26,27 @@ const booking = function () {
     const [opacity, setOpacity] = useState('Opacity');
     const [deleteOrderID, setDeleteOrderID] = useState('Enter Order ID');
 
-
     const [data, setData] = useState([]);
+
+    const [isOnline, setIsOnline] = useState(null);
 
     useEffect(() => {
         Booked();
+
+        // function handleStatusChange(status){
+        //     setIsOnline(status.isOnline);
+        // }
+
+        
     });
+
+    
 
     const deleteSchedule = async function () {
        
         delAttemptCount = delAttemptCount + 1;
         ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.116:3303/schedule/delete/' + deleteOrderID;
+        let buildhttp = 'http://192.168.0.103:3303/schedule/delete/' + deleteOrderID;
         if (deleteOrderID === '') {
             if (delAttemptCount === 1) {
                 Alert.alert('Please Fill in the Blank', 'Please Try Again', [
@@ -62,7 +71,7 @@ const booking = function () {
 
     const Booked = async function () {
         ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.116:3303/schedule/check/' + ID;
+        let buildhttp = 'http://192.168.0.103:3303/schedule/check/' + ID;
         let arr = [];
         axios.get(buildhttp)
         .then((res) => {
@@ -94,7 +103,7 @@ const booking = function () {
         else if (time !== 'Time' || day !== 'Day' || month !== 'Month' || year !== 'Year' || opacity !== 'Opacity') {
             let ID = await AsyncRetrieve();
             console.log(ID);
-            axios.post('http://192.168.0.116:3303/schedule/add', {
+            axios.post('http://192.168.0.103:3303/schedule/add', {
                 time: time,
                 day: day,
                 month: month,

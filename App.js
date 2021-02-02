@@ -11,6 +11,15 @@ import Register from './src/screens/register';
 import Base from './src/screens/base';
 import Reservation from './src/screens/reservation';
 
+//menu here
+import menuSushi from './src/menu/sushi';
+import menuSashimi from './src/menu/sashimi';
+import menuDonmono from './src/menu/donmono';
+import menuSpecialMaki from './src/menu/specialmaki';
+import menuYakimono from './src/menu/yakimono';
+import menuDrinks from './src/menu/drinks';
+
+
 import homeHeader from './src/components/Header';
 
 // import test from './src/testing';
@@ -76,6 +85,126 @@ export default function App() {
           }}
           name="Reservation"
           component={Reservation}
+          
+        />
+
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'white'
+            },
+            headerTitleStyle: {
+              alignSelf: 'center',
+              color: '#FA4B3E',
+              fontWeight: 'bold',
+              letterSpacing: 2,
+              fontSize: 20,
+            },
+          
+          }}
+          name="Sushi"
+          component={menuSushi}
+          
+        />
+
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'white'
+            },
+            headerTitleStyle: {
+              alignSelf: 'center',
+              color: '#FA4B3E',
+              fontWeight: 'bold',
+              letterSpacing: 2,
+              fontSize: 20,
+            },
+          
+          }}
+          name="Sashimi"
+          component={menuSashimi}
+          
+        />
+
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'white'
+            },
+            headerTitleStyle: {
+              alignSelf: 'center',
+              color: '#FA4B3E',
+              fontWeight: 'bold',
+              letterSpacing: 2,
+              fontSize: 20,
+            },
+          
+          }}
+          name="Donmono"
+          component={menuDonmono}
+          
+        />
+
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'white'
+            },
+            headerTitleStyle: {
+              alignSelf: 'center',
+              color: '#FA4B3E',
+              fontWeight: 'bold',
+              letterSpacing: 2,
+              fontSize: 20,
+            },
+          
+          }}
+          name="SpecialMaki"
+          component={menuSpecialMaki}
+          
+        />
+
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'white'
+            },
+            headerTitleStyle: {
+              alignSelf: 'center',
+              color: '#FA4B3E',
+              fontWeight: 'bold',
+              letterSpacing: 2,
+              fontSize: 20,
+            },
+          
+          }}
+          name="Yakimono"
+          component={menuYakimono}
+          
+        />
+
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'white'
+            },
+            headerTitleStyle: {
+              alignSelf: 'center',
+              color: '#FA4B3E',
+              fontWeight: 'bold',
+              letterSpacing: 2,
+              fontSize: 20,
+            },
+          
+          }}
+          name="Drinks"
+          component={menuDrinks}
           
         />
 

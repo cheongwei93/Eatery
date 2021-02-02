@@ -25,7 +25,7 @@ const register = function({navigation}) {
                 {text: 'Try Again'}
             ]);
         }else{
-            axios.post('http://192.168.0.116:3303/user/register', {
+            axios.post('http://192.168.0.103:3303/user/register', {
                 email: email,
                 password: password,
                 name: name

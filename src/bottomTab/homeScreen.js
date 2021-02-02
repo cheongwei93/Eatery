@@ -22,7 +22,7 @@ class homeScreen extends Component {
     constructor(props){
         super(props)
     }
-
+    
     render() {
         return (
             <View style={styles.container}>
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     container: {
         position: 'relative',
         flex: 1,
+        backgroundColor: 'white'
         
     },
     middle: {
