@@ -14,20 +14,23 @@ const windowsWidth = Dimensions.get('window').width;
 
 const cart = function(){
 
-    useEffect(()=>{
-        getOrderItem();
-    });
-
+    const [render, setRender] = useState(true);
     const [data, setData] = useState([]);
-    
+
+    useEffect(()=>{
+        if(render === true){
+            getOrderItem();
+        }
+    });
 
     const getOrderItem = async function(){
         
         let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/order/' + ID;
+        let buildhttp = 'http://192.168.43.13:3303/order/' + ID;
         axios.get(buildhttp)
         .then((res)=>{
             setData(res.data.result);
+            setRender(false);
         }).catch((err)=>{
             console.log(err);
         })
@@ -58,7 +61,7 @@ const cart = function(){
     }
 
     const deleteOrder = async function(ID){
-        let buildhttp = 'http://192.168.0.115:3303/order/delete/' + ID;
+        let buildhttp = 'http://192.168.43.13:3303/order/delete/' + ID;
         axios.delete(buildhttp)
         .then((res)=>{
             Alert.alert('Item Removed', '', [
@@ -74,7 +77,7 @@ const cart = function(){
         
         console.log(data.length);
         let ID = await AsyncRetrieve();
-        axios.put('http://192.168.0.115:3303/order/update', {
+        axios.put('http://192.168.43.13:3303/order/update', {
             userID: ID
         });
 

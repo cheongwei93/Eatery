@@ -16,6 +16,8 @@ let delAttemptCount = 0;
 let ID;
 const booking = function () {
 
+    const [render, setRender] = useState(true);
+
     const [time, setTime] = useState('Time');
     const [modalVisible, setModalVisible] = useState(false);
     const [deletemodalVisible, setDeleteModalVisible] = useState(false);
@@ -28,16 +30,10 @@ const booking = function () {
 
     const [data, setData] = useState([]);
 
-    const [isOnline, setIsOnline] = useState(null);
-
     useEffect(() => {
-        Booked();
-
-        // function handleStatusChange(status){
-        //     setIsOnline(status.isOnline);
-        // }
-
-        
+        if(render === true){
+            Booked();
+        }
     });
 
     
@@ -46,7 +42,7 @@ const booking = function () {
        
         delAttemptCount = delAttemptCount + 1;
         ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/schedule/delete/' + deleteOrderID;
+        let buildhttp = 'http://192.168.43.13:3303/schedule/delete/' + deleteOrderID;
         if (deleteOrderID === '') {
             if (delAttemptCount === 1) {
                 Alert.alert('Please Fill in the Blank', 'Please Try Again', [
@@ -70,12 +66,13 @@ const booking = function () {
 
     const Booked = async function () {
         ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/schedule/check/' + ID;
+        let buildhttp = 'http://192.168.43.13:3303/schedule/check/' + ID;
         let arr = [];
         axios.get(buildhttp)
         .then((res) => {
             let result = res.data.result;
             setData(result);
+            setRender(false);
             getSchedule();
         }).catch((err) => {
             console.log(err);
@@ -102,7 +99,7 @@ const booking = function () {
         else if (time !== 'Time' || day !== 'Day' || month !== 'Month' || year !== 'Year' || opacity !== 'Opacity') {
             let ID = await AsyncRetrieve();
             console.log(ID);
-            axios.post('http://192.168.0.115:3303/schedule/add', {
+            axios.post('http://192.168.43.13:3303/schedule/add', {
                 time: time,
                 day: day,
                 month: month,

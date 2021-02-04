@@ -7,20 +7,26 @@ const windowsHeight = Dimensions.get('window').height;
 const windowsWidth = Dimensions.get('window').width;
 
 const yakimono = function () {
+    const[render, setRender] = useState(true);
+    const[data, setData] = useState([]);
+
     useEffect(() => {
-        getMenuItem();
+        if(render === true){
+            getMenuItem();
+        }
+        
     });
 
-    const[data, setData] = useState([]);
+    
 
     const getMenuItem = async function () {
         ID = await AsyncRetrieve();
         let category = "yakimono";
-        axios.post('http://192.168.0.115:3303/menu/check', {
+        axios.post('http://192.168.43.13:3303/menu/check', {
             category: category
         }).then((res) => {
             setData(res.data.result);
-            showMenuItem();
+            setRender(false);
     
         }).catch((err) => {
             console.log(err);
@@ -37,7 +43,7 @@ const yakimono = function () {
 
     const addOrder = async function(name, price, foodID){
         let ID = await AsyncRetrieve();
-        axios.post('http://192.168.0.115:3303/order/add',{
+        axios.post('http://192.168.43.13:3303/order/add',{
             foodName: name,
             foodPrice: price,
             foodID: foodID,

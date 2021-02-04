@@ -19,7 +19,7 @@ const login = function ({ navigation }) {
                 {text: 'Try Again'}
             ])
         }else{
-            axios.post('http://192.168.0.115:3303/user/login', {
+            axios.post('http://192.168.43.13:3303/user/login', {
                 email: email,
                 password: password
             }).then((res)=>{

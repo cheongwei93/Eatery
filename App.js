@@ -12,6 +12,7 @@ import Base from './src/screens/base';
 import Reservation from './src/screens/reservation';
 import cart from './src/screens/cart';
 import checkin from './src/screens/checkin';
+import updateProfile from './src/screens/updateProfile';
 
 //menu here
 import menuSushi from './src/menu/sushi';
@@ -23,6 +24,7 @@ import menuDrinks from './src/menu/drinks';
 
 
 import homeHeader from './src/components/Header';
+
 
 // import test from './src/testing';
 // import loginTest from './src/failed/loginTest';
@@ -245,6 +247,26 @@ export default function App() {
           }}
           name="Check In"
           component={checkin}
+          
+        />
+
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'white'
+            },
+            headerTitleStyle: {
+              alignSelf: 'center',
+              color: '#FA4B3E',
+              fontWeight: 'bold',
+              letterSpacing: 2,
+              fontSize: 20,
+            },
+          
+          }}
+          name="Update Profile"
+          component={updateProfile}
           
         />
 
