@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, ScrollView, TouchableOpacity, Alert, addons } from 'react-native';
 import AsyncRetrieve from '../components/AsyncRetrieve';
 import axios from 'axios';
 
@@ -7,20 +7,26 @@ const windowsHeight = Dimensions.get('window').height;
 const windowsWidth = Dimensions.get('window').width;
 
 const sushi = function () {
+    // must be top
+    const[data, setData] = useState([]);
+    const[render, setRender] = useState(true);
     useEffect(() => {
-        getMenuItem();
+        if(render === true){
+            getMenuItem();
+        }
+        
     });
 
-    const[data, setData] = useState([]);
+    
 
     const getMenuItem = async function () {
         ID = await AsyncRetrieve();
         let category = "sushi";
-        axios.post('http://192.168.0.103:3303/menu/check', {
+        axios.post('http://192.168.0.115:3303/menu/check', {
             category: category
         }).then((res) => {
             setData(res.data.result);
-            showMenuItem();
+            setRender(false);
     
         }).catch((err) => {
             console.log(err);
@@ -37,7 +43,7 @@ const sushi = function () {
 
     const addOrder = async function(name, price, foodID){
         let ID = await AsyncRetrieve();
-        axios.post('http://192.168.0.103:3303/order/add',{
+        axios.post('http://192.168.0.115:3303/order/add',{
             foodName: name,
             foodPrice: price,
             foodID: foodID,

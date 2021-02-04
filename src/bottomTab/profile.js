@@ -1,18 +1,16 @@
 import React, {Component} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
-
-class profile extends Component{
-    render(){
-        return(
+const profile = function(){
+    return(
+        <View style={styles.container}>
             <View>
-                <Text>Profile Screen</Text>
+                <FontAwesome name="user-circle"/>
             </View>
-        );
-
-    }
-            
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({});

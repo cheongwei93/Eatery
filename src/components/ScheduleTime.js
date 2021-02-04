@@ -19,8 +19,8 @@ const ScheduleTime = function({day, month, year, time, opacity, orderID}){
                     <Text style={styles.date}>
                         {year}
                     </Text>
-                    <Text style={{marginLeft: 100}}>
-                        ORDER ID : {orderID}
+                    <Text style={{marginLeft: 70}}>
+                        BOOKING ID : {orderID}
                     </Text>
                 </View>
                 <Text style={styles.time}>

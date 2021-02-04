@@ -5,6 +5,7 @@ import Swiper from 'react-native-swiper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Card from '../components/Card';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 // image
 import pic1 from '../../images/Sushi/001.jpg'
@@ -74,12 +75,19 @@ class homeScreen extends Component {
                             </View>
                             <Text style={styles.categoryBtnTxt}>Reservation</Text>
                         </TouchableOpacity>
-                        
-                        <TouchableOpacity>
+
+                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('Cart')}}>
                             <View style={styles.categoryIcon}>
-                                <FontAwesome5 name={'plus'} size={35} color='#FA4B3E' />
+                                <SimpleLineIcons name={'basket'} size={35} color={'#FA4B3E'}/>
                             </View>
-                            <Text style={styles.categoryBtnTxt}>More</Text>
+                            <Text style={styles.categoryBtnTxt}>Cart</Text>
+                        </TouchableOpacity>
+                        
+                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('Check In')}}>
+                            <View style={styles.categoryIcon}>
+                                <FontAwesome5 name={'check-circle'} size={35} color='#FA4B3E' />
+                            </View>
+                            <Text style={styles.categoryBtnTxt}>Check In</Text>
                         </TouchableOpacity>
                         
                     </View>
@@ -203,7 +211,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 60,
         height: 60,
-        backgroundColor: '#fdeae7' /* '#FF6347' */,
+        backgroundColor: '#fdeae7',
         borderRadius: 50,
         marginHorizontal: 10
     },

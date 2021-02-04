@@ -10,6 +10,8 @@ import Login2 from './src/screens/login2';
 import Register from './src/screens/register';
 import Base from './src/screens/base';
 import Reservation from './src/screens/reservation';
+import cart from './src/screens/cart';
+import checkin from './src/screens/checkin';
 
 //menu here
 import menuSushi from './src/menu/sushi';
@@ -30,8 +32,6 @@ import homeHeader from './src/components/Header';
 // import card from './src/components/Card';
 
 const Stack = createStackNavigator();
-
-
 
 export default function App() {
   return (
@@ -205,6 +205,46 @@ export default function App() {
           }}
           name="Drinks"
           component={menuDrinks}
+          
+        />
+
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'white'
+            },
+            headerTitleStyle: {
+              alignSelf: 'center',
+              color: '#FA4B3E',
+              fontWeight: 'bold',
+              letterSpacing: 2,
+              fontSize: 20,
+            },
+          
+          }}
+          name="Cart"
+          component={cart}
+          
+        />
+
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'white'
+            },
+            headerTitleStyle: {
+              alignSelf: 'center',
+              color: '#FA4B3E',
+              fontWeight: 'bold',
+              letterSpacing: 2,
+              fontSize: 20,
+            },
+          
+          }}
+          name="Check In"
+          component={checkin}
           
         />
 
