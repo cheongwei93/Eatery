@@ -23,6 +23,7 @@ class tabScreen extends Component {
         initialRouteName="Home"
         barStyle={styles.bar}
         activeColor="#FA4B3E"
+
       >
 
         <Tab.Screen
@@ -34,6 +35,7 @@ class tabScreen extends Component {
               <Foundation name="clipboard-notes" color={color} size={24} />
             )
           }}
+          
         />
 
         <Tab.Screen

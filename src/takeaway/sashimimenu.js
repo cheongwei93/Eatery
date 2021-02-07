@@ -6,7 +6,8 @@ import axios from 'axios';
 const windowsHeight = Dimensions.get('window').height;
 const windowsWidth = Dimensions.get('window').width;
 
-const sashimi = function () {
+const sashimi = function ({route}) {
+    const {takeawayID} = route.params;
     const[render, setRender] = useState(true);
     const[data, setData] = useState([]);
     useEffect(() => {
@@ -43,13 +44,14 @@ const sashimi = function () {
 
     const addOrder = async function(name, price, foodID){
         let ID = await AsyncRetrieve();
-        let type = 'DINE';
+        let type = 'TAKEAWAY';
         axios.post('http://192.168.0.115:3303/order/add',{
             foodName: name,
             foodPrice: price,
             foodID: foodID,
             userID: ID,
-            type: type
+            type: type,
+            takeawayID: takeawayID
         }).then((res)=>{
             console.log(res.data.message);
             Alert.alert('Added to cart',' ',[

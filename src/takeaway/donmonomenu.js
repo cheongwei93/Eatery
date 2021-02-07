@@ -6,28 +6,28 @@ import axios from 'axios';
 const windowsHeight = Dimensions.get('window').height;
 const windowsWidth = Dimensions.get('window').width;
 
-const sashimi = function () {
-    const[render, setRender] = useState(true);
-    const[data, setData] = useState([]);
+const donmono = function ({route}) {
+    const {takeawayID} = route.params;
+    const [data, setData] = useState([]);
+    const [render, setRender] = useState(true);
     useEffect(() => {
-        if(render === true){
+        if (render === true) {
             getMenuItem();
         }
-        
+
     });
 
-    
+
 
     const getMenuItem = async function () {
         ID = await AsyncRetrieve();
-        let category = "sashimi";
+        let category = "donmono";
         axios.post('http://192.168.0.115:3303/menu/check', {
             category: category
         }).then((res) => {
-            setData(res.data.result);
             setRender(false);
-           
-    
+            setData(res.data.result);
+
         }).catch((err) => {
             console.log(err);
         })
@@ -41,33 +41,34 @@ const sashimi = function () {
         })
     }
 
-    const addOrder = async function(name, price, foodID){
+    const addOrder = async function (name, price, foodID) {
         let ID = await AsyncRetrieve();
-        let type = 'DINE';
-        axios.post('http://192.168.0.115:3303/order/add',{
+        let type = 'TAKEAWAY';
+        axios.post('http://192.168.0.115:3303/order/add', {
             foodName: name,
             foodPrice: price,
             foodID: foodID,
             userID: ID,
-            type: type
-        }).then((res)=>{
-            console.log(res.data.message);
-            Alert.alert('Added to cart',' ',[
-                {text: 'Continue'}
-            ]);
-        }).catch((error)=>{
-            console.log(error);
-        })
+            type: type,
+            takeawayID: takeawayID
+        }).then((res) => {
+                console.log(res.data.message);
+                Alert.alert('Added to cart', ' ', [
+                    { text: 'Continue' }
+                ]);
+            }).catch((error) => {
+                console.log(error);
+            })
     }
 
-    const menuCard = function (key, name, price, imgLocation, ID) {    
-   
+    const menuCard = function (key, name, price, imgLocation, ID) {
+
         return (
-    
+
             <View style={styles.card} key={key}>
                 <View style={styles.imageContainer}>
-                    <Image 
-                        source={{uri: imgLocation}}
+                    <Image
+                        source={{ uri: imgLocation }}
                         style={styles.image}
                         resizeMode='contain'
                     />
@@ -79,14 +80,14 @@ const sashimi = function () {
                     <Text style={styles.price}>
                         {price}
                     </Text>
-                    <TouchableOpacity style={styles.addButton} onPress={()=>{addOrder(name, price, ID)}}>
-                        <Text style={{fontWeight: 'bold', color: 'white'}}>
+                    <TouchableOpacity style={styles.addButton} onPress={() => { addOrder(name, price, ID) }}>
+                        <Text style={{ fontWeight: 'bold', color: 'white' }}>
                             ADD+
                         </Text>
                     </TouchableOpacity>
                 </View>
             </View>
-    
+
         )
     }
 
@@ -96,7 +97,7 @@ const sashimi = function () {
 
             <View style={styles.container}>
                 {showMenuItem()}
-                
+
 
             </View>
         </ScrollView>
@@ -160,4 +161,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default sashimi;
+export default donmono;

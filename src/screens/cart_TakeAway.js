@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, ScrollView, Alert} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions,Alert} from 'react-native';
+import AsyncRetrieve from '../components/AsyncRetrieve';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
-import AsyncRetrieve from '../components/AsyncRetrieve';
 import axios from 'axios';
-import pic from '../../images/Sushi/004.jpg';
+import { useLinkProps } from '@react-navigation/native';
 
 const windowsHeight = Dimensions.get('window').height;
 const windowsWidth = Dimensions.get('window').width;
 
-
-
-
-const cart = function(){
-
+const cartTakeAway = function({route ,navigation}){
     const [render, setRender] = useState(true);
     const [data, setData] = useState([]);
-
+    const {takeawayID} = route.params;
+    
     useEffect(()=>{
         if(render === true){
             getOrderItem();
@@ -24,10 +21,11 @@ const cart = function(){
     });
 
     const getOrderItem = async function(){
-        let type = "DINE"
         let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/order/' + ID;
-        axios.get(buildhttp)
+        axios.post('http://192.168.0.115:3303/order/takeaway',{
+            ID: ID,
+            takeawayID: takeawayID
+        })
         .then((res)=>{
             setData(res.data.result);
             setRender(false);
@@ -64,9 +62,10 @@ const cart = function(){
         let buildhttp = 'http://192.168.0.115:3303/order/delete/' + ID;
         axios.delete(buildhttp)
         .then((res)=>{
+            
             Alert.alert('Item Removed', '', [
                 { text: 'Continue' }
-            ]);
+            ]);setRender(true);
         })
         .catch((err)=>{
             console.log(err);
@@ -74,42 +73,61 @@ const cart = function(){
     }
 
     const orderConfirmed = async function(){
-        
-        console.log(data.length);
         let ID = await AsyncRetrieve();
-        axios.put('http://192.168.0.115:3303/order/update', {
-            userID: ID
-        });
-
-        Alert.alert('Orders Confirmed', '', [
-            { text: 'Continue' }
-        ]);
+        axios.put('http://192.168.0.115:3303/takeaway/update',{
+            userID: ID,
+            takeawayID: takeawayID
+        }).then((res)=>{
+            Alert.alert('Order Confirmed', '', [
+                { text: 'Continue' }
+            ]);setRender(true);
+        }).catch((error)=>{
+            console.log(error);
+        })
     }
-
-    return(
+    return (
+        
         <ScrollView>
             <View style={styles.container}>
-
                 {showOrderItem()}
-                
-                <TouchableOpacity style={styles.button} onPress={()=>{orderConfirmed()}}>
-                    <View>
-                        <Text style={styles.text}>
-                            CONFIRM ORDER
-                        </Text>
-                    </View>
+                <TouchableOpacity style={styles.Button} onPress={()=>{orderConfirmed()}}>
+                    <Text style={styles.buttonText}>Confirm Order</Text>
                 </TouchableOpacity>
-
+                <TouchableOpacity style={styles.Button2} onPress={()=>{navigation.navigate("Menu2", {takeawayID: takeawayID})}}>
+                    <Text style={{fontSize: 20, color: '#FA4B3E', fontWeight: 'bold', textAlign: 'center'}}>Browse Menu</Text>
+                </TouchableOpacity>
+                
             </View>
-        </ScrollView>
-    )
+            
+        </ScrollView>    
+        )
 }
 
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        position: 'relative'
+    Button: {
+        width: '60%',
+        backgroundColor: '#FA4B3E',
+        alignSelf: 'center',
+        marginTop: 50,
+        padding: 15,
+        borderRadius: 8
+    },
+    Button2:{
+        width: '60%',
+        backgroundColor: 'white',
+        alignSelf: 'center',
+        marginVertical: 20,
+        padding: 15,
+        borderRadius: 8,
+        borderWidth: 2,
+        borderColor: '#FA4B3E'
+    },
+    buttonText: {
+        fontSize: 20,
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center'
+        
     },
     image: {
         height: 150,
@@ -152,21 +170,10 @@ const styles = StyleSheet.create({
         marginTop: 100,
         
     },
-    button: {
-        alignSelf: 'center',
-        backgroundColor: '#FA4B3E',
-        height: 60,
-        width: windowsWidth / 1.2,
-        borderRadius:8,
-        marginVertical: 40,
+    container: {
+        flex: 1,
+        position: 'relative'
     },
-    text: {
-        alignSelf: 'center',
-        paddingTop: 12,
-        fontSize: 25,
-        fontWeight: 'bold',
-        color: 'white'
-    }
 });
 
-export default cart;
+export default cartTakeAway;

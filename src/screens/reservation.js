@@ -6,7 +6,6 @@ import { Picker } from '@react-native-community/picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios';
 import AsyncRetrieve from '../components/AsyncRetrieve';
 import ScheduleTime from '../components/ScheduleTime';
@@ -42,7 +41,7 @@ const booking = function () {
        
         delAttemptCount = delAttemptCount + 1;
         ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.43.13:3303/schedule/delete/' + deleteOrderID;
+        let buildhttp = 'http://192.168.0.115:3303/schedule/delete/' + deleteOrderID;
         if (deleteOrderID === '') {
             if (delAttemptCount === 1) {
                 Alert.alert('Please Fill in the Blank', 'Please Try Again', [
@@ -50,7 +49,6 @@ const booking = function () {
                 ]);
             }
         } else {
-            console.log(deleteOrderID);
             axios.delete(buildhttp)
             .then((res) => {
                 Alert.alert('Schedule Successfully Removed', '', [
@@ -66,7 +64,7 @@ const booking = function () {
 
     const Booked = async function () {
         ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.43.13:3303/schedule/check/' + ID;
+        let buildhttp = 'http://192.168.0.115:3303/schedule/check/' + ID;
         let arr = [];
         axios.get(buildhttp)
         .then((res) => {
@@ -99,7 +97,7 @@ const booking = function () {
         else if (time !== 'Time' || day !== 'Day' || month !== 'Month' || year !== 'Year' || opacity !== 'Opacity') {
             let ID = await AsyncRetrieve();
             console.log(ID);
-            axios.post('http://192.168.43.13:3303/schedule/add', {
+            axios.post('http://192.168.0.115:3303/schedule/add', {
                 time: time,
                 day: day,
                 month: month,
@@ -234,21 +232,6 @@ const booking = function () {
             <ScrollView>
                 <View stlye={styles.middle}>
                     <View style={styles.cardBorder}>
-                        {/* <TouchableOpacity>
-                            <View style={styles.card}>
-                                <Text style={styles.date}>
-                                    31/01/2021
-                            </Text>
-                                <Text style={styles.time}>
-                                    Time: 1700 Hours
-                            </Text>
-                                <Text style={styles.opacity}>
-                                    5
-                            </Text>
-                                <AntDesign name={"user"} size={25} color='#FA4B3E' style={styles.icon} />
-                            </View>
-                        </TouchableOpacity> */}
-
 
                         {getSchedule()}
 

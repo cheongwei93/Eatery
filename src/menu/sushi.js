@@ -6,13 +6,17 @@ import axios from 'axios';
 const windowsHeight = Dimensions.get('window').height;
 const windowsWidth = Dimensions.get('window').width;
 
-const sushi = function () {
+const sushi = function (props) {
+
+    
+
     // must be top
     const[data, setData] = useState([]);
     const[render, setRender] = useState(true);
     useEffect(() => {
         if(render === true){
             getMenuItem();
+            
         }
         
     });
@@ -22,7 +26,7 @@ const sushi = function () {
     const getMenuItem = async function () {
         ID = await AsyncRetrieve();
         let category = "sushi";
-        axios.post('http://192.168.43.13:3303/menu/check', {
+        axios.post('http://192.168.0.115:3303/menu/check', {
             category: category
         }).then((res) => {
             setData(res.data.result);
@@ -43,11 +47,13 @@ const sushi = function () {
 
     const addOrder = async function(name, price, foodID){
         let ID = await AsyncRetrieve();
-        axios.post('http://192.168.43.13:3303/order/add',{
+        let type = "DINE";
+        axios.post('http://192.168.0.115:3303/order/add',{
             foodName: name,
             foodPrice: price,
             foodID: foodID,
-            userID: ID
+            userID: ID,
+            type: type
         }).then((res)=>{
             console.log(res.data.message);
             Alert.alert('Added to cart',' ',[

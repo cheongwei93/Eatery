@@ -6,9 +6,10 @@ import axios from 'axios';
 const windowsHeight = Dimensions.get('window').height;
 const windowsWidth = Dimensions.get('window').width;
 
-const sashimi = function () {
-    const[render, setRender] = useState(true);
+const donmono = function ({route}) {
+    const {takeawayID} = route.params;
     const[data, setData] = useState([]);
+    const[render, setRender] = useState(true);
     useEffect(() => {
         if(render === true){
             getMenuItem();
@@ -17,16 +18,14 @@ const sashimi = function () {
     });
 
     
-
     const getMenuItem = async function () {
         ID = await AsyncRetrieve();
-        let category = "sashimi";
+        let category = "specialmaki";
         axios.post('http://192.168.0.115:3303/menu/check', {
             category: category
         }).then((res) => {
             setData(res.data.result);
             setRender(false);
-           
     
         }).catch((err) => {
             console.log(err);
@@ -43,13 +42,14 @@ const sashimi = function () {
 
     const addOrder = async function(name, price, foodID){
         let ID = await AsyncRetrieve();
-        let type = 'DINE';
+        let type = 'TAKEAWAY';
         axios.post('http://192.168.0.115:3303/order/add',{
             foodName: name,
             foodPrice: price,
             foodID: foodID,
             userID: ID,
-            type: type
+            type: type,
+            takeawayID: takeawayID
         }).then((res)=>{
             console.log(res.data.message);
             Alert.alert('Added to cart',' ',[
@@ -160,4 +160,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default sashimi;
+export default donmono;

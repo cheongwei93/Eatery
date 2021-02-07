@@ -13,8 +13,8 @@ const windowsHeight = Dimensions.get('window').height;
 const windowsWidth = Dimensions.get('window').width;
 
 
-const menu = function(props){
-    
+const menu = function({route, navigation}){
+    const {takeawayID} = route.params;
     
     return (
 
@@ -23,7 +23,7 @@ const menu = function(props){
                 <View style={{ flexDirection: 'row' }}>
 
                     <View style={styles.menuContainer}>
-                        <TouchableOpacity onPress={() => { props.navigation.navigate('Sushi') }}>
+                        <TouchableOpacity onPress={() => { navigation.navigate('Sushi Menu', {takeawayID: takeawayID}) }}>
                             <Image
                                 source={pic1}
                                 resizeMode='cover'
@@ -36,7 +36,7 @@ const menu = function(props){
                     </View>
 
                     <View style={styles.menuContainer}>
-                        <TouchableOpacity onPress={()=>{navigation.navigate('Sashimi')}}>
+                        <TouchableOpacity onPress={()=>{navigation.navigate('Sashimi Menu', {takeawayID: takeawayID})}}>
                             <Image
                                 source={pic2}
                                 resizeMode='cover'
@@ -52,7 +52,7 @@ const menu = function(props){
 
                 <View style={{ flexDirection: 'row' }}>
                     <View style={styles.menuContainer}>
-                        <TouchableOpacity onPress={()=>{navigation.navigate('Donmono')}}>
+                        <TouchableOpacity onPress={()=>{navigation.navigate('Donmono Menu',{takeawayID: takeawayID})}}>
                             <Image
                                 source={pic3}
                                 resizeMode='cover'
@@ -65,7 +65,7 @@ const menu = function(props){
                     </View>
 
                     <View style={styles.menuContainer}>
-                        <TouchableOpacity onPress={()=>{navigation.navigate('SpecialMaki')}}>
+                        <TouchableOpacity onPress={()=>{navigation.navigate('SpecialMaki Menu', {takeawayID: takeawayID})}}>
                             <Image
                                 source={pic4}
                                 resizeMode='cover'
@@ -81,7 +81,7 @@ const menu = function(props){
 
                 <View style={{ flexDirection: 'row' }}>
                     <View style={styles.menuContainer}>
-                        <TouchableOpacity onPress={()=>{navigation.navigate('Yakimono')}}>
+                        <TouchableOpacity onPress={()=>{navigation.navigate('Yakimono Menu', {takeawayID: takeawayID})}}>
                             <Image
                                 source={pic5}
                                 resizeMode='cover'
@@ -94,7 +94,7 @@ const menu = function(props){
                     </View>
 
                     <View style={styles.menuContainer}>
-                        <TouchableOpacity onPress={()=>{navigation.navigate('Drinks')}}>
+                        <TouchableOpacity onPress={()=>{navigation.navigate('Drinks Menu', {takeawayID: takeawayID})}}>
                             <Image
                                 source={pic6}
                                 resizeMode='cover'

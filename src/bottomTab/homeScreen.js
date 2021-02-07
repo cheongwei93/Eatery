@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { Header } from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Card from '../components/Card';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // image
 import pic1 from '../../images/Sushi/001.jpg'
@@ -61,12 +61,11 @@ class homeScreen extends Component {
                 
 
                     <View style={styles.categoryContainer}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('Take Away')}}>
                             <View style={styles.categoryIcon}>
-                                <FontAwesome5 name={'chair'} size={35} color='#FA4B3E'/>
-                                
+                                <MaterialCommunityIcons name={'food-fork-drink'} size={35} color='#FA4B3E'/>
                             </View>
-                            <Text style={styles.categoryBtnTxt}>Order</Text>
+                            <Text style={styles.categoryBtnTxt}>Take Away</Text>
                         </TouchableOpacity>
                         
                         <TouchableOpacity onPress={()=>{this.props.navigation.navigate('Reservation')}}>
