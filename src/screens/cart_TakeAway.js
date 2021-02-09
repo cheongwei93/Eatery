@@ -4,7 +4,6 @@ import AsyncRetrieve from '../components/AsyncRetrieve';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
 import axios from 'axios';
-import { useLinkProps } from '@react-navigation/native';
 
 const windowsHeight = Dimensions.get('window').height;
 const windowsWidth = Dimensions.get('window').width;
@@ -22,7 +21,7 @@ const cartTakeAway = function({route ,navigation}){
 
     const getOrderItem = async function(){
         let ID = await AsyncRetrieve();
-        axios.post('http://192.168.0.115:3303/order/takeaway',{
+        axios.post('http://192.168.43.13:3303/order/takeaway',{
             ID: ID,
             takeawayID: takeawayID
         })
@@ -59,7 +58,7 @@ const cartTakeAway = function({route ,navigation}){
     }
 
     const deleteOrder = async function(ID){
-        let buildhttp = 'http://192.168.0.115:3303/order/delete/' + ID;
+        let buildhttp = 'http://192.168.43.13:3303/order/delete/' + ID;
         axios.delete(buildhttp)
         .then((res)=>{
             
@@ -74,17 +73,28 @@ const cartTakeAway = function({route ,navigation}){
 
     const orderConfirmed = async function(){
         let ID = await AsyncRetrieve();
-        axios.put('http://192.168.0.115:3303/takeaway/update',{
+        axios.put('http://192.168.43.13:3303/takeaway/update',{
             userID: ID,
             takeawayID: takeawayID
         }).then((res)=>{
+            takeawayConfirmed();
             Alert.alert('Order Confirmed', '', [
                 { text: 'Continue' }
-            ]);setRender(true);
+            ]);
+            
+            setRender(true);
         }).catch((error)=>{
             console.log(error);
         })
     }
+
+    //takeaway progress confirmed
+    const takeawayConfirmed = async function(){
+        axios.put('http://192.168.43.13:3303/takeaway/takeawayConfirm',{
+            id: takeawayID
+        })
+    }
+
     return (
         
         <ScrollView>

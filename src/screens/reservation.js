@@ -41,7 +41,7 @@ const booking = function () {
        
         delAttemptCount = delAttemptCount + 1;
         ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/schedule/delete/' + deleteOrderID;
+        let buildhttp = 'http://192.168.43.13:3303/schedule/delete/' + deleteOrderID;
         if (deleteOrderID === '') {
             if (delAttemptCount === 1) {
                 Alert.alert('Please Fill in the Blank', 'Please Try Again', [
@@ -64,7 +64,7 @@ const booking = function () {
 
     const Booked = async function () {
         ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/schedule/check/' + ID;
+        let buildhttp = 'http://192.168.43.13:3303/schedule/check/' + ID;
         let arr = [];
         axios.get(buildhttp)
         .then((res) => {
@@ -97,7 +97,7 @@ const booking = function () {
         else if (time !== 'Time' || day !== 'Day' || month !== 'Month' || year !== 'Year' || opacity !== 'Opacity') {
             let ID = await AsyncRetrieve();
             console.log(ID);
-            axios.post('http://192.168.0.115:3303/schedule/add', {
+            axios.post('http://192.168.43.13:3303/schedule/add', {
                 time: time,
                 day: day,
                 month: month,
@@ -342,7 +342,7 @@ const booking = function () {
                                 <View style={styles.modalContent}>
                                     <Text style={{ alignSelf: 'center', fontSize: 30, marginTop: 150, color: '#FA4B3E', fontWeight: 'bold' }}>
                                         Cancel Reservation
-                                   </Text>
+                                    </Text>
                                     <View style={{ borderBottomWidth: 2, borderColor: '#FA4B3E', marginTop: 40, marginBottom: 40, alignSelf: 'center', width: '80%' }}>
                                         <TextInput
                                             keyboardType='number-pad'

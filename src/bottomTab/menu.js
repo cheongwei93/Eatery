@@ -13,7 +13,7 @@ const windowsHeight = Dimensions.get('window').height;
 const windowsWidth = Dimensions.get('window').width;
 
 
-const menu = function(props){
+const menu = function({navigation}){
     
     
     return (
@@ -23,7 +23,7 @@ const menu = function(props){
                 <View style={{ flexDirection: 'row' }}>
 
                     <View style={styles.menuContainer}>
-                        <TouchableOpacity onPress={() => { props.navigation.navigate('Sushi') }}>
+                        <TouchableOpacity onPress={() => {navigation.navigate('Sushi') }}>
                             <Image
                                 source={pic1}
                                 resizeMode='cover'

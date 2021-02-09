@@ -16,10 +16,10 @@ const profile = function({navigation}){
     useEffect(()=>{
         getDetails();
     });
-
+    
     const getDetails = async function(){
         let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/user/get/' + ID;
+        let buildhttp = 'http://192.168.43.13:3303/user/get/' + ID;
         axios.get(buildhttp)
         .then((res)=>{
             setData(res.data.result[0]);

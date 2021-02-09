@@ -41,7 +41,7 @@ const takeaway = function({navigation}){
   
     const insertTakeAway = async function(){
         let ID = await AsyncRetrieve();
-        axios.post('http://192.168.0.115:3303/takeaway/add', {
+        axios.post('http://192.168.43.13:3303/takeaway/add', {
             time: time,
             userID: ID
         }).then((res)=>{
@@ -55,7 +55,7 @@ const takeaway = function({navigation}){
 
     const checkTakeAway = async function(){
         let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/takeaway/' + ID;
+        let buildhttp = 'http://192.168.43.13:3303/takeaway/' + ID;
         axios.get(buildhttp)
         .then((res)=>{
             let result = res.data.result;
@@ -95,7 +95,7 @@ const takeaway = function({navigation}){
     const deleteTakeAway = async function(){
         delAttemptCount = delAttemptCount + 1;
         let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/takeaway/' + deleteOrderID;
+        let buildhttp = 'http://192.168.43.13:3303/takeaway/' + deleteOrderID;
         if(deleteOrderID === ''){
             if(delAttemptCount === 1){
                 Alert.alert('Please Fill in the Blank', 'Please Try Again', [

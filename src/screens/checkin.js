@@ -21,7 +21,7 @@ const checkin = function () {
 
     const checkin = async function () {
         let ID = await AsyncRetrieve();
-        axios.put('http://192.168.0.115:3303/schedule/checkin', {
+        axios.put('http://192.168.43.13:3303/schedule/checkin', {
             ID: checkinID,
             userID: ID,
             tableNumber: tableNumber
@@ -36,7 +36,7 @@ const checkin = function () {
     }
 
     const checkTableNumber = async function () {
-        axios.get('http://192.168.0.115:3303/schedule/table')
+        axios.get('http://192.168.43.13:3303/schedule/table')
         .then((res) => {
             setTableNumber(res.data.result[0].id);
         })
@@ -44,7 +44,7 @@ const checkin = function () {
     }
 
     const tabletaken = async function(){
-        axios.put('http://192.168.0.115:3303/schedule/notavailable',{
+        axios.put('http://192.168.43.13:3303/schedule/notavailable',{
             ID: tableNumber
         });
     }

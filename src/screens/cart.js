@@ -4,7 +4,6 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 
 import AsyncRetrieve from '../components/AsyncRetrieve';
 import axios from 'axios';
-import pic from '../../images/Sushi/004.jpg';
 
 const windowsHeight = Dimensions.get('window').height;
 const windowsWidth = Dimensions.get('window').width;
@@ -16,17 +15,18 @@ const cart = function(){
 
     const [render, setRender] = useState(true);
     const [data, setData] = useState([]);
+    const [tableNumber, setTableNumber] = useState(); 
 
     useEffect(()=>{
         if(render === true){
+            getTableNumber();
             getOrderItem();
         }
     });
 
     const getOrderItem = async function(){
-        let type = "DINE"
         let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/order/' + ID;
+        let buildhttp = 'http://192.168.43.13:3303/order/' + ID;
         axios.get(buildhttp)
         .then((res)=>{
             setData(res.data.result);
@@ -61,7 +61,7 @@ const cart = function(){
     }
 
     const deleteOrder = async function(ID){
-        let buildhttp = 'http://192.168.0.115:3303/order/delete/' + ID;
+        let buildhttp = 'http://192.168.43.13:3303/order/delete/' + ID;
         axios.delete(buildhttp)
         .then((res)=>{
             Alert.alert('Item Removed', '', [
@@ -75,15 +75,34 @@ const cart = function(){
 
     const orderConfirmed = async function(){
         
-        console.log(data.length);
         let ID = await AsyncRetrieve();
-        axios.put('http://192.168.0.115:3303/order/update', {
-            userID: ID
+        axios.put('http://192.168.43.13:3303/order/update', {
+            userID: ID,
+            tableNumber: tableNumber
         });
-
+        updateStatus();
         Alert.alert('Orders Confirmed', '', [
             { text: 'Continue' }
         ]);
+    }
+
+    const updateStatus = async function(){
+        let ID = await AsyncRetrieve();
+        axios.put('http://192.168.43.13:3303/order/orderconfirmed', {
+            userID: ID
+        });
+    }
+
+    const getTableNumber = async function(){
+        let ID = await AsyncRetrieve();
+        let buildhttp = 'http://192.168.43.13:3303/order/getTable/' + ID;
+        
+        axios.get(buildhttp)
+        .then((res)=>{
+            
+            let result = res.data.result[0].tableNumber;
+            setTableNumber(result);
+        })
     }
 
     return(

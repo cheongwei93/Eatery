@@ -9,7 +9,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import Profile from '../bottomTab/profile';
 import Menu from '../bottomTab/menu';
-import Order from '../bottomTab/order';
+import Bill from '../bottomTab/bill';
 import Home from '../bottomTab/homeScreen';
 
 const Tab = createMaterialBottomTabNavigator();
@@ -27,10 +27,10 @@ class tabScreen extends Component {
       >
 
         <Tab.Screen
-          name="Order"
-          component={Order}
+          name="Bill"
+          component={Bill}
           options={{
-            tabBarLabel: 'Order',
+            tabBarLabel: 'Bill',
             tabBarIcon: ({ color }) => (
               <Foundation name="clipboard-notes" color={color} size={24} />
             )
