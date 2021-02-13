@@ -26,7 +26,7 @@ const cart = function(){
 
     const getOrderItem = async function(){
         let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.43.13:3303/order/' + ID;
+        let buildhttp = 'http://192.168.0.115:3303/order/' + ID;
         axios.get(buildhttp)
         .then((res)=>{
             setData(res.data.result);
@@ -61,7 +61,7 @@ const cart = function(){
     }
 
     const deleteOrder = async function(ID){
-        let buildhttp = 'http://192.168.43.13:3303/order/delete/' + ID;
+        let buildhttp = 'http://192.168.0.115:3303/order/delete/' + ID;
         axios.delete(buildhttp)
         .then((res)=>{
             Alert.alert('Item Removed', '', [
@@ -76,7 +76,7 @@ const cart = function(){
     const orderConfirmed = async function(){
         
         let ID = await AsyncRetrieve();
-        axios.put('http://192.168.43.13:3303/order/update', {
+        axios.put('http://192.168.0.115:3303/order/update', {
             userID: ID,
             tableNumber: tableNumber
         });
@@ -88,14 +88,14 @@ const cart = function(){
 
     const updateStatus = async function(){
         let ID = await AsyncRetrieve();
-        axios.put('http://192.168.43.13:3303/order/orderconfirmed', {
+        axios.put('http://192.168.0.115:3303/order/orderconfirmed', {
             userID: ID
         });
     }
 
     const getTableNumber = async function(){
         let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.43.13:3303/order/getTable/' + ID;
+        let buildhttp = 'http://192.168.0.115:3303/order/getTable/' + ID;
         
         axios.get(buildhttp)
         .then((res)=>{

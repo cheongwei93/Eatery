@@ -21,7 +21,7 @@ const cartTakeAway = function({route ,navigation}){
 
     const getOrderItem = async function(){
         let ID = await AsyncRetrieve();
-        axios.post('http://192.168.43.13:3303/order/takeaway',{
+        axios.post('http://192.168.0.115:3303/order/takeaway',{
             ID: ID,
             takeawayID: takeawayID
         })
@@ -57,8 +57,10 @@ const cartTakeAway = function({route ,navigation}){
         )
     }
 
+
+
     const deleteOrder = async function(ID){
-        let buildhttp = 'http://192.168.43.13:3303/order/delete/' + ID;
+        let buildhttp = 'http://192.168.0.115:3303/order/delete/' + ID;
         axios.delete(buildhttp)
         .then((res)=>{
             
@@ -73,7 +75,7 @@ const cartTakeAway = function({route ,navigation}){
 
     const orderConfirmed = async function(){
         let ID = await AsyncRetrieve();
-        axios.put('http://192.168.43.13:3303/takeaway/update',{
+        axios.put('http://192.168.0.115:3303/takeaway/update',{
             userID: ID,
             takeawayID: takeawayID
         }).then((res)=>{
@@ -90,7 +92,7 @@ const cartTakeAway = function({route ,navigation}){
 
     //takeaway progress confirmed
     const takeawayConfirmed = async function(){
-        axios.put('http://192.168.43.13:3303/takeaway/takeawayConfirm',{
+        axios.put('http://192.168.0.115:3303/takeaway/takeawayConfirm',{
             id: takeawayID
         })
     }
@@ -102,6 +104,9 @@ const cartTakeAway = function({route ,navigation}){
                 {showOrderItem()}
                 <TouchableOpacity style={styles.Button} onPress={()=>{orderConfirmed()}}>
                     <Text style={styles.buttonText}>Confirm Order</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.Button} onPress={()=>{navigation.navigate('Bill', {takeawayID: takeawayID})}}>
+                    <Text style={styles.buttonText}>Bill</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.Button2} onPress={()=>{navigation.navigate("Menu2", {takeawayID: takeawayID})}}>
                     <Text style={{fontSize: 20, color: '#FA4B3E', fontWeight: 'bold', textAlign: 'center'}}>Browse Menu</Text>
@@ -118,7 +123,7 @@ const styles = StyleSheet.create({
         width: '60%',
         backgroundColor: '#FA4B3E',
         alignSelf: 'center',
-        marginTop: 50,
+        marginTop: 20,
         padding: 15,
         borderRadius: 8
     },

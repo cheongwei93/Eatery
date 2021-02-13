@@ -15,6 +15,7 @@ import checkin from './src/screens/checkin';
 import updateProfile from './src/screens/updateProfile';
 import takeAway from './src/screens/takeAway';
 import cartTakeAway from './src/screens/cart_TakeAway';
+import takeawayBill from './src/screens/takeawayBill';
 
 //menu here
 import menuSushi from './src/menu/sushi';
@@ -458,6 +459,26 @@ export default function App() {
           }}
           name="Yakimono Menu"
           component={yakimonomenu}
+          
+        />
+
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'white'
+            },
+            headerTitleStyle: {
+              alignSelf: 'center',
+              color: '#FA4B3E',
+              fontWeight: 'bold',
+              letterSpacing: 2,
+              fontSize: 20,
+            },
+          
+          }}
+          name="Bill"
+          component={takeawayBill}
           
         />
 

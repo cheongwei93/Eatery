@@ -1,68 +1,49 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Modal } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, ScrollView, Modal, TouchableOpacity } from 'react-native';
+import axios from 'axios';
 import { WebView } from 'react-native-webview';
 
-import AsyncRetrieve from '../components/AsyncRetrieve';
 
 
-const bill = function () {
+const bill = function ({ route, navigation }) {
 
-    const [total, setTotal] = useState(0);
-    const [render, setRender] = useState(true);
+
+    const { takeawayID } = route.params;
     const [data, setData] = useState([]);
     const [calculate, setCalculate] = useState(false);
+    const [render, setRender] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [status, setStatus] = useState("Pending");
+    const [total, setTotal] = useState(0); 
     const [payhttp, setPayHttp] = useState();
-    const [tableNumber, setTableNumber] = useState();
 
-    const handleResponse = function (data) {
-        if (data.title === 'success') {
+    const handleResponse = function(data) {
+        if(data.title === 'success'){
             setStatus('Complete');
-            deleteSchedule();
-            setRender(true);
+            deleteOrder();
+            deleteTakeaway();
             setShowModal(false);
-            
-        } else if (data.title === 'cancel') {
+        }else if(data.title === 'cancel'){
             setShowModal(false);
             setStatus('Cancel');
-        } else {
+        }else{
             return;
         }
     }
 
-    useEffect(() => {
-
-        if (render === true) {
-            if (calculate === true) {
+    useEffect(()=>{
+        if(render === true){
+            
+            if(calculate === true){
                 count();
             }
-            TableNumber();
-
+            checkOrder();
+            
         }
     });
 
-    const TableNumber = async function () {
-        let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/bill/getTable/' + ID;
-        axios.get(buildhttp)
-            .then((res) => {
-                let result;
-                if (!res.data.result[0]) {
-                    result = 0;
-                } else {
-                    result = res.data.result[0].tableNumber;
-                    setTableNumber(result);
-                }
-                checkOrder(result);
-
-            })
-    }
-
-    const checkOrder = async function (ID) {
-        let buildhttp = 'http://192.168.0.115:3303/bill/getOrder/' + ID;
+    const checkOrder = async function () {
+        let buildhttp = 'http://192.168.0.115:3303/takeaway/takeawayOrder/' + takeawayID;
         axios.get(buildhttp)
             .then((res) => {
                 let result = res.data.result;
@@ -70,6 +51,18 @@ const bill = function () {
                 setCalculate(true);
                 setRender(false);
             })
+    }
+
+    const count = async function(){
+        let result = total;
+        for(let item of data){
+
+            result = result + item.foodPrice;
+        }
+        await setTotal(result);
+        let temp =  "http://192.168.0.115:3303/paypal/paypal/" + result;  
+        setPayHttp(temp); 
+        setCalculate(false); 
     }
 
     const show = function () {
@@ -80,43 +73,21 @@ const bill = function () {
         })
     }
 
-    const count = async function () {
-        let result = total;
-        for (let item of data) {
-            result = result + item.foodPrice;
-        }
-        await setTotal(result);
-        let temp = "http://192.168.0.115:3303/paypal/paypal/" + result;
-        setPayHttp(temp);
-
-        setCalculate(false);
-    }
-
-    const deleteSchedule = async function(){
-        let buildhttp = 'http://192.168.0.115:3303/schedule/deleteSchedule/' + tableNumber;
+    const deleteOrder = async function(){
+        let buildhttp = "http://192.168.0.115:3303/order/deleteOrder/" + takeawayID;
         axios.delete(buildhttp)
         .then((res)=>{
-            deleteOrders();
+
         }).catch((err)=>{
             throw err;
         })
     }
 
-    const deleteOrders = async function(){
-        let buildhttp = 'http://192.168.0.115:3303/schedule/deleteOrders/' + tableNumber;
+    const deleteTakeaway = async function(){
+        let buildhttp = "http://192.168.0.115:3303/order/deleteTakeaway/" + takeawayID;
         axios.delete(buildhttp)
         .then((res)=>{
-            tableAvailable();
-        }).catch((err)=>{
-            throw err;
-        })
-    }
 
-    const tableAvailable = async function(){
-        axios.put('http://192.168.0.115:3303/schedule/tableAvailable',{
-            tableNumber : tableNumber
-        }).then((res)=>{
-            
         }).catch((err)=>{
             throw err;
         })
@@ -143,8 +114,6 @@ const bill = function () {
         )
     };
 
-
-
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -160,15 +129,15 @@ const bill = function () {
 
 
             <View>
-                <Modal visible={showModal} onRequestClose={() => { setShowModal(false) }}>
+                <Modal visible={showModal} onRequestClose={()=>{setShowModal(false)}}>
                     <WebView
                         source={{ uri: payhttp }}
-                        onNavigationStateChange={(data) => { handleResponse(data) }}
-
+                        onNavigationStateChange={(data)=>{handleResponse(data)}}
+                        
                     />
                 </Modal>
 
-                <TouchableOpacity onPress={() => { setShowModal(true) }}>
+                <TouchableOpacity onPress={()=>{setShowModal(true)}}>
                     <Text>Pay</Text>
                 </TouchableOpacity>
                 <Text>Payment Status: {status}</Text>
@@ -177,9 +146,6 @@ const bill = function () {
         </ScrollView>
 
     );
-
-
-
 }
 
 const styles = StyleSheet.create({
