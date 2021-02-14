@@ -22,7 +22,8 @@ const bill = function () {
         if (data.title === 'success') {
             setStatus('Complete');
             deleteSchedule();
-            setRender(true);
+            deleteOrders();
+            tableAvailable();
             setShowModal(false);
             
         } else if (data.title === 'cancel') {
@@ -96,7 +97,7 @@ const bill = function () {
         let buildhttp = 'http://192.168.0.115:3303/schedule/deleteSchedule/' + tableNumber;
         axios.delete(buildhttp)
         .then((res)=>{
-            deleteOrders();
+            // deleteOrders();
         }).catch((err)=>{
             throw err;
         })
@@ -106,7 +107,7 @@ const bill = function () {
         let buildhttp = 'http://192.168.0.115:3303/schedule/deleteOrders/' + tableNumber;
         axios.delete(buildhttp)
         .then((res)=>{
-            tableAvailable();
+            // tableAvailable();
         }).catch((err)=>{
             throw err;
         })
@@ -120,6 +121,10 @@ const bill = function () {
         }).catch((err)=>{
             throw err;
         })
+    }
+
+    const checkBill = function(){
+        setRender(true);
     }
 
     const buildCard = function (key, foodID, foodName, foodPrice) {
@@ -170,6 +175,11 @@ const bill = function () {
 
                 <TouchableOpacity onPress={() => { setShowModal(true) }}>
                     <Text>Pay</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>{checkBill()}}>
+                    <Text>
+                        Check Bill
+                    </Text>
                 </TouchableOpacity>
                 <Text>Payment Status: {status}</Text>
             </View>

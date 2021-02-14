@@ -10,29 +10,43 @@ const windowsWidth = Dimensions.get('window').width;
 const checkin = function () {
 
     const [checkinID, setCheckInID] = useState('Enter Booking ID');
-    //const [checkin, setCheckIn] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [tableNumber, setTableNumber] = useState("?");
-
 
     useEffect(()=>{
         checkTableNumber();
     });
 
+
     const checkin = async function () {
-        let ID = await AsyncRetrieve();
-        axios.put('http://192.168.0.115:3303/schedule/checkin', {
-            ID: checkinID,
-            userID: ID,
-            tableNumber: tableNumber
-        }).then((res) => {
-            tabletaken();
-            Alert.alert('Checked In', ' ', [
+        if(checkinID === "Enter Booking ID"){
+            Alert.alert('Please Enter Booking ID', ' ', [
                 { text: 'Continue' }
             ]);
-        }).catch((err) => {
-            res.send(err);
-        })
+        }else{
+            let ID = await AsyncRetrieve();
+            await checkTableNumber();
+            axios.put('http://192.168.0.115:3303/schedule/checkin', {
+                ID: checkinID,
+                userID: ID,
+                tableNumber: tableNumber
+            }).then((res) => {
+                if(res.data.result.affectedRows === 0){
+                    Alert.alert('Try Again', ' ', [
+                        { text: 'Continue' }
+                    ]);
+                }else{
+                    tabletaken();
+                    Alert.alert('Checked In', ' ', [
+                        { text: 'Continue' }
+                    ]);
+                }
+                
+            }).catch((err) => {
+                res.send(err);
+            })
+        }
+        
     }
 
     const checkTableNumber = async function () {
@@ -53,7 +67,7 @@ const checkin = function () {
         <View>
             <View style={styles.table}>
                 <Text style={styles.text}>Table Number</Text>
-                <Text style={styles.number}>{tableNumber}</Text>
+                <Text style={styles.number}>{tableNumber - 1}</Text>
             </View>
 
             <TouchableOpacity style={styles.button} onPress={() => { setModalVisible(true) }}>

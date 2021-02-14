@@ -11,7 +11,7 @@ const windowsWidth = Dimensions.get('window').width;
 
 
 
-const cart = function(){
+const cart = function({navigation}){
 
     const [render, setRender] = useState(true);
     const [data, setData] = useState([]);
@@ -75,15 +75,23 @@ const cart = function(){
 
     const orderConfirmed = async function(){
         
-        let ID = await AsyncRetrieve();
-        axios.put('http://192.168.0.115:3303/order/update', {
-            userID: ID,
-            tableNumber: tableNumber
-        });
-        updateStatus();
-        Alert.alert('Orders Confirmed', '', [
-            { text: 'Continue' }
-        ]);
+        if(data.length === 0){
+            Alert.alert('Order is Empty', '', [
+                { text: 'Try Again' }
+            ]);
+        }else{
+            let ID = await AsyncRetrieve();
+            axios.put('http://192.168.0.115:3303/order/update', {
+                userID: ID,
+                tableNumber: tableNumber
+            });
+            updateStatus();
+            Alert.alert('Orders Confirmed', '', [
+                { text: 'Continue' }
+            ]);
+        }
+
+        
     }
 
     const updateStatus = async function(){
@@ -99,9 +107,16 @@ const cart = function(){
         
         axios.get(buildhttp)
         .then((res)=>{
+            if(res.data.result.length === 0){
+                Alert.alert('Please Check In', '', [
+                    { text: 'Continue' }
+                ]);
+                navigation.navigate('base');
+            }else{
+                let result = res.data.result[0].tableNumber;
+                setTableNumber(result);
+            }
             
-            let result = res.data.result[0].tableNumber;
-            setTableNumber(result);
         })
     }
 
