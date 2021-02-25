@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Modal, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import { WebView } from 'react-native-webview';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 
@@ -19,10 +20,17 @@ const bill = function ({ route, navigation }) {
 
     const handleResponse = function(data) {
         if(data.title === 'success'){
+            Alert.alert('Payment Completed',' ',[
+                {text: 'Continue'}
+            ]);
             setStatus('Complete');
             deleteOrder();
             deleteTakeaway();
             setShowModal(false);
+
+            //
+            
+            
         }else if(data.title === 'cancel'){
             setShowModal(false);
             setStatus('Cancel');
@@ -42,8 +50,18 @@ const bill = function ({ route, navigation }) {
         }
     });
 
+    const payment = async function(){
+        if(total !== 0){
+            setShowModal(true);
+        }else{
+            Alert.alert('Total Amount is Empty.','Access Denied',[
+                {text: 'Continue'}
+            ]);
+        }
+    }
+
     const checkOrder = async function () {
-        let buildhttp = 'http://192.168.0.115:3303/takeaway/takeawayOrder/' + takeawayID;
+        let buildhttp = 'http://10.0.2.2:3303/takeaway/takeawayOrder/' + takeawayID;
         axios.get(buildhttp)
             .then((res) => {
                 let result = res.data.result;
@@ -60,7 +78,7 @@ const bill = function ({ route, navigation }) {
             result = result + item.foodPrice;
         }
         await setTotal(result);
-        let temp =  "http://192.168.0.115:3303/paypal/paypal/" + result;  
+        let temp =  "http://10.0.2.2:3303/paypal/paypal/" + result;  
         setPayHttp(temp); 
         setCalculate(false); 
     }
@@ -74,7 +92,7 @@ const bill = function ({ route, navigation }) {
     }
 
     const deleteOrder = async function(){
-        let buildhttp = "http://192.168.0.115:3303/order/deleteOrder/" + takeawayID;
+        let buildhttp = "http://10.0.2.2:3303/order/deleteOrder/" + takeawayID;
         axios.delete(buildhttp)
         .then((res)=>{
 
@@ -84,7 +102,7 @@ const bill = function ({ route, navigation }) {
     }
 
     const deleteTakeaway = async function(){
-        let buildhttp = "http://192.168.0.115:3303/order/deleteTakeaway/" + takeawayID;
+        let buildhttp = "http://10.0.2.2:3303/order/deleteTakeaway/" + takeawayID;
         axios.delete(buildhttp)
         .then((res)=>{
 
@@ -137,10 +155,14 @@ const bill = function ({ route, navigation }) {
                     />
                 </Modal>
 
-                <TouchableOpacity onPress={()=>{setShowModal(true)}}>
+                {/* <TouchableOpacity onPress={()=>{setShowModal(true)}}>
                     <Text>Pay</Text>
+                </TouchableOpacity> */}
+                <TouchableOpacity style={styles.payButton} onPress={() => { payment() }}>
+                    <FontAwesome name={"paypal"} size={25} color='white' style={styles.icon2} />
+                    <Text style={styles.buttonText}>PayPal</Text>
                 </TouchableOpacity>
-                <Text>Payment Status: {status}</Text>
+                
             </View>
 
         </ScrollView>
@@ -176,7 +198,25 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         fontWeight: 'bold'
-    }
+    },
+    payButton: {
+        width: '60%',
+        backgroundColor: '#3b7bbf',
+        alignSelf: 'center',
+        marginVertical: 50,
+        flexDirection: 'row',
+        padding: 20,
+        borderRadius: 8
+    },
+    buttonText: {
+        fontSize: 20,
+        color: 'white',
+        fontWeight: 'bold',
+        marginLeft: 40,
+    },
+    icon2: {
+        paddingLeft: 10
+    },
 });
 
 export default bill;

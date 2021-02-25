@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Modal, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { WebView } from 'react-native-webview';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import AsyncRetrieve from '../components/AsyncRetrieve';
 
@@ -14,13 +15,22 @@ const bill = function () {
     const [data, setData] = useState([]);
     const [calculate, setCalculate] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [status, setStatus] = useState("Pending");
     const [payhttp, setPayHttp] = useState();
     const [tableNumber, setTableNumber] = useState();
 
+    useEffect(() => {
+
+        if (render === true) {
+            if (calculate === true) {
+                count();
+            }
+            TableNumber();
+
+        }
+    });
+
     const handleResponse = function (data) {
         if (data.title === 'success') {
-            setStatus('Complete');
             deleteSchedule();
             deleteOrders();
             tableAvailable();
@@ -34,20 +44,11 @@ const bill = function () {
         }
     }
 
-    useEffect(() => {
-
-        if (render === true) {
-            if (calculate === true) {
-                count();
-            }
-            TableNumber();
-
-        }
-    });
+    
 
     const TableNumber = async function () {
         let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/bill/getTable/' + ID;
+        let buildhttp = 'http://10.0.2.2:3303/bill/getTable/' + ID;
         axios.get(buildhttp)
             .then((res) => {
                 let result;
@@ -63,7 +64,7 @@ const bill = function () {
     }
 
     const checkOrder = async function (ID) {
-        let buildhttp = 'http://192.168.0.115:3303/bill/getOrder/' + ID;
+        let buildhttp = 'http://10.0.2.2:3303/bill/getOrder/' + ID;
         axios.get(buildhttp)
             .then((res) => {
                 let result = res.data.result;
@@ -87,14 +88,14 @@ const bill = function () {
             result = result + item.foodPrice;
         }
         await setTotal(result);
-        let temp = "http://192.168.0.115:3303/paypal/paypal/" + result;
+        let temp = "http://10.0.2.2:3303/paypal/paypal/" + (result).toFixed(2);
         setPayHttp(temp);
 
         setCalculate(false);
     }
 
     const deleteSchedule = async function(){
-        let buildhttp = 'http://192.168.0.115:3303/schedule/deleteSchedule/' + tableNumber;
+        let buildhttp = 'http://10.0.2.2:3303/schedule/deleteSchedule/' + tableNumber;
         axios.delete(buildhttp)
         .then((res)=>{
             // deleteOrders();
@@ -104,7 +105,7 @@ const bill = function () {
     }
 
     const deleteOrders = async function(){
-        let buildhttp = 'http://192.168.0.115:3303/schedule/deleteOrders/' + tableNumber;
+        let buildhttp = 'http://10.0.2.2:3303/schedule/deleteOrders/' + tableNumber;
         axios.delete(buildhttp)
         .then((res)=>{
             // tableAvailable();
@@ -114,13 +115,23 @@ const bill = function () {
     }
 
     const tableAvailable = async function(){
-        axios.put('http://192.168.0.115:3303/schedule/tableAvailable',{
+        axios.put('http://10.0.2.2:3303/schedule/tableAvailable',{
             tableNumber : tableNumber
         }).then((res)=>{
             
         }).catch((err)=>{
             throw err;
         })
+    }
+
+    const payment = async function(){
+        if(total !== 0){
+            setShowModal(true);
+        }else{
+            Alert.alert('Total Amount is Empty.','Access Denied',[
+                {text: 'Continue'}
+            ]);
+        }
     }
 
     const checkBill = function(){
@@ -157,7 +168,7 @@ const bill = function () {
 
                 <View style={styles.price}>
                     <Text style={styles.text}>
-                        Total Amount:    {total}
+                        Total Amount:    {(total).toFixed(2)}
                     </Text>
                 </View>
 
@@ -173,15 +184,19 @@ const bill = function () {
                     />
                 </Modal>
 
-                <TouchableOpacity onPress={() => { setShowModal(true) }}>
+                {/* <TouchableOpacity onPress={() => { setShowModal(true) }}>
                     <Text>Pay</Text>
+                </TouchableOpacity> */}
+                <TouchableOpacity style={styles.payButton} onPress={() => { payment() }}>
+                    <FontAwesome name={"paypal"} size={25} color='white' style={styles.icon2} />
+                    <Text style={styles.buttonText}>PayPal</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{checkBill()}}>
-                    <Text>
+
+                <TouchableOpacity style={styles.checkBillBtn} onPress={()=>{checkBill()}}>
+                    <Text style={[styles.buttonText, {marginLeft: "30%"}]}>
                         Check Bill
                     </Text>
                 </TouchableOpacity>
-                <Text>Payment Status: {status}</Text>
             </View>
 
         </ScrollView>
@@ -220,6 +235,33 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         fontWeight: 'bold'
+    },
+    payButton: {
+        width: '60%',
+        backgroundColor: '#3b7bbf',
+        alignSelf: 'center',
+        marginVertical: 50,
+        flexDirection: 'row',
+        padding: 20,
+        borderRadius: 8
+    },
+    buttonText: {
+        fontSize: 20,
+        color: 'white',
+        fontWeight: 'bold',
+        marginLeft: 40,
+    },
+    icon2: {
+        paddingLeft: 10
+    },
+    checkBillBtn: {
+        width: '60%',
+        backgroundColor: '#FA4B3E',
+        alignSelf: 'center',
+        marginTop: '-8%',
+        flexDirection: 'row',
+        padding: 20,
+        borderRadius: 8
     }
 });
 

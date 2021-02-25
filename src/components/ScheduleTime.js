@@ -3,7 +3,7 @@ import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-const ScheduleTime = function({day, month, year, time, opacity, orderID}){
+const ScheduleTime = function({day, month, year, time, opacity, orderID, status}){
     return(
         <TouchableOpacity>
             <View style={styles.card}>
@@ -26,6 +26,10 @@ const ScheduleTime = function({day, month, year, time, opacity, orderID}){
                 <Text style={styles.time}>
                     {time}
                 </Text>
+                
+                <Text style={{fontSize: 15, paddingTop: 20, paddingBottom: -50}}>
+                        Status: {status}
+                    </Text>
                 
                 <Text style={styles.opacity}>
                     {opacity}

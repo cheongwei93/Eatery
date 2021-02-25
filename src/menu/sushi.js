@@ -24,7 +24,7 @@ const sushi = function (props) {
     const getMenuItem = async function () {
         ID = await AsyncRetrieve();
         let category = "sushi";
-        axios.post('http://192.168.0.115:3303/menu/check', {
+        axios.post('http://10.0.2.2:3303/menu/check', {
             category: category
         }).then((res) => {
             setData(res.data.result);
@@ -46,7 +46,7 @@ const sushi = function (props) {
     const addOrder = async function(name, price, foodID){
         let ID = await AsyncRetrieve();
         let type = "DINE";
-        axios.post('http://192.168.0.115:3303/order/add',{
+        axios.post('http://10.0.2.2:3303/order/add',{
             foodName: name,
             foodPrice: price,
             foodID: foodID,

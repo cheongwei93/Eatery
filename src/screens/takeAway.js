@@ -41,21 +41,28 @@ const takeaway = function({navigation}){
   
     const insertTakeAway = async function(){
         let ID = await AsyncRetrieve();
-        axios.post('http://192.168.0.115:3303/takeaway/add', {
-            time: time,
-            userID: ID
-        }).then((res)=>{
-            takeawayID = res.data.result.insertId;
-            Alert.alert('Time Booked', '', [
+        if(time === "Time"){
+            Alert.alert('Please Select Time', '', [
                 { text: 'Continue' }
             ]);
-            setRender(true);
-        })
+        }else{
+            axios.post('http://10.0.2.2:3303/takeaway/add', {
+                time: time,
+                userID: ID
+            }).then((res)=>{
+                takeawayID = res.data.result.insertId;
+                Alert.alert('Time Booked', '', [
+                    { text: 'Continue' }
+                ]);
+                setRender(true);
+            })
+        }
+        
     }   
 
     const checkTakeAway = async function(){
         let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/takeaway/' + ID;
+        let buildhttp = 'http://10.0.2.2:3303/takeaway/' + ID;
         axios.get(buildhttp)
         .then((res)=>{
             let result = res.data.result;
@@ -94,10 +101,10 @@ const takeaway = function({navigation}){
 
     const deleteTakeAway = async function(){
         delAttemptCount = delAttemptCount + 1;
-        let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/takeaway/' + deleteOrderID;
-        if(deleteOrderID === ''){
-            if(delAttemptCount === 1){
+        let buildhttp = 'http://10.0.2.2:3303/takeaway/' + deleteOrderID;
+        if(delAttemptCount === 1){
+            if(deleteOrderID === 'Enter Order ID'){
+                delAttemptCount = 0;
                 Alert.alert('Please Fill in the Blank', 'Please Try Again', [
                     { text: 'Try Again' }
                 ]);
@@ -105,11 +112,20 @@ const takeaway = function({navigation}){
         } else {
             axios.delete(buildhttp)
             .then((res) => {
-                Alert.alert('Take Away Successfully Removed', '', [
-                    { text: 'Continue' }
-                ]);
-                setRender(true);
-                setDeleteModalVisible(false);
+                if(res.data.result.affectedRows === 0){
+                    delAttemptCount = 0;
+                    Alert.alert('Booking ID not exist', ' ', [
+                        { text: 'Continue' }
+                    ]);
+                }else if(res.data.result.affectedRows > 0){
+                    delAttemptCount = 0;
+                    Alert.alert('Take Away Successfully Removed', '', [
+                        { text: 'Continue' }
+                    ]);
+                    setRender(true);
+                    setDeleteModalVisible(false);
+                }
+                
             }).catch((err) => {
                 console.log(err);
             })

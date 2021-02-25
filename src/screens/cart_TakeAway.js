@@ -21,7 +21,7 @@ const cartTakeAway = function({route ,navigation}){
 
     const getOrderItem = async function(){
         let ID = await AsyncRetrieve();
-        axios.post('http://192.168.0.115:3303/order/takeaway',{
+        axios.post('http://10.0.2.2:3303/order/takeaway',{
             ID: ID,
             takeawayID: takeawayID
         })
@@ -60,7 +60,7 @@ const cartTakeAway = function({route ,navigation}){
 
 
     const deleteOrder = async function(ID){
-        let buildhttp = 'http://192.168.0.115:3303/order/delete/' + ID;
+        let buildhttp = 'http://10.0.2.2:3303/order/delete/' + ID;
         axios.delete(buildhttp)
         .then((res)=>{
             
@@ -74,25 +74,32 @@ const cartTakeAway = function({route ,navigation}){
     }
 
     const orderConfirmed = async function(){
-        let ID = await AsyncRetrieve();
-        axios.put('http://192.168.0.115:3303/takeaway/update',{
-            userID: ID,
-            takeawayID: takeawayID
-        }).then((res)=>{
-            takeawayConfirmed();
-            Alert.alert('Order Confirmed', '', [
-                { text: 'Continue' }
+        if(data.length === 0){
+            Alert.alert('Orders are Empty', '', [
+                { text: 'Try Again' }
             ]);
-            
-            setRender(true);
-        }).catch((error)=>{
-            console.log(error);
-        })
+        }else{
+            let ID = await AsyncRetrieve();
+            axios.put('http://10.0.2.2:3303/takeaway/update',{
+                userID: ID,
+                takeawayID: takeawayID
+            }).then((res)=>{
+                takeawayConfirmed();
+                Alert.alert('Order Confirmed', '', [
+                    { text: 'Continue' }
+                ]);
+                
+                setRender(true);
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+        
     }
 
     //takeaway progress confirmed
     const takeawayConfirmed = async function(){
-        axios.put('http://192.168.0.115:3303/takeaway/takeawayConfirm',{
+        axios.put('http://10.0.2.2:3303/takeaway/takeawayConfirm',{
             id: takeawayID
         })
     }

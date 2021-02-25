@@ -19,23 +19,7 @@ const updateProfile = function(){
     const[password, setPassword] = useState("password");
     const[confirmPassword, setConfirmPassword] = useState("confirmpassword");
 
-    useEffect(()=>{
-        if(render === true){
-            getDetails();
-        }
-    });
 
-    const getDetails = async function(){
-        let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:33033/user/get/' + ID;
-        axios.get(buildhttp)
-        .then((res)=>{
-            setData(res.data.result[0]);
-            setRender(false);
-        }).catch((err)=>{
-            res.send(err);
-        })
-    }
 
     const update = async function(){
         AttemptCount = AttemptCount + 1;
@@ -53,7 +37,7 @@ const updateProfile = function(){
                 ]);
             }else if(password === confirmPassword){
                 let ID = await AsyncRetrieve();
-                axios.put('http://192.168.0.115:3303/user/update', {
+                axios.put('http://10.0.2.2:3303/user/update', {
                     ID: ID,
                     name: name,
                     password: password

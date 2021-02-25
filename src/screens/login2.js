@@ -10,17 +10,17 @@ import store from '../components/AsyncStore';
 
 const login = function ({ navigation }) {
 
-    const [email, setEmail] = useState("");
+    const [username, setusername] = useState("");
     const [password, setPassword] = useState("");
 
     const verify = function(){
-        if(!email || !password){
+        if(!username || !password){
             Alert.alert('Please Enter Username or Password !', 'Please Try Again', [
                 {text: 'Try Again'}
             ])
         }else{
-            axios.post('http://192.168.0.115:3303/user/login', {
-                email: email,
+            axios.post('http://10.0.2.2:3303/user/login', {
+                username: username,
                 password: password
             }).then((res)=>{
                 if(res.data.auth === "FALSE"){
@@ -62,7 +62,7 @@ const login = function ({ navigation }) {
                     <Form style={styles.mainform}>
 
                         <Item style={styles.formItem}>
-                            <Input placeholder="Email" style={styles.Input} onChangeText={text => setEmail(text)} />
+                            <Input placeholder="username" style={styles.Input} onChangeText={text => setusername(text)} />
                         </Item>
                         <Item style={styles.formItem}>
                             <Input placeholder="Password" style={styles.Input} secureTextEntry={true} onChangeText={text => setPassword(text)}/>

@@ -19,7 +19,7 @@ const profile = function({navigation}){
     
     const getDetails = async function(){
         let ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/user/get/' + ID;
+        let buildhttp = 'http://10.0.2.2:3303/user/get/' + ID;
         axios.get(buildhttp)
         .then((res)=>{
             setData(res.data.result[0]);
@@ -42,9 +42,9 @@ const profile = function({navigation}){
                 </View>
                 <View style={styles.detail}>
                     <Text style={styles.output}>
-                        {data.email}
+                        {data.username}
                     </Text>
-                    <Text style={styles.label}>Email</Text>
+                    <Text style={styles.label}>username</Text>
                 </View>
                 <TouchableOpacity style={styles.update} onPress={()=>{navigation.navigate('Update Profile')}}>
                         <Text style={{fontSize: 18, fontWeight: 'bold',color: '#FFFFFF',}}>

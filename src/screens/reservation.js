@@ -41,9 +41,10 @@ const booking = function () {
        
         delAttemptCount = delAttemptCount + 1;
         ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/schedule/delete/' + deleteOrderID;
-        if (deleteOrderID === '') {
+        let buildhttp = 'http://10.0.2.2:3303/schedule/delete/' + deleteOrderID;
+        if (deleteOrderID === 'Enter Order ID') {
             if (delAttemptCount === 1) {
+                delAttemptCount = 0;
                 Alert.alert('Please Fill in the Blank', 'Please Try Again', [
                     { text: 'Try Again' }
                 ]);
@@ -51,11 +52,20 @@ const booking = function () {
         } else {
             axios.delete(buildhttp)
             .then((res) => {
-                Alert.alert('Schedule Successfully Removed', '', [
-                    { text: 'Continue' }
-                ]);
-                setRender(false);
-                setDeleteModalVisible(false);
+                if(res.data.result.affectedRows === 0){
+                    delAttemptCount = 0;
+                    Alert.alert('Booking ID not exist', '', [
+                        { text: 'Continue' }
+                    ]);
+                }else if(res.data.result.affectedRows > 0){
+                    delAttemptCount = 0;
+                    Alert.alert('Schedule Successfully Removed', '', [
+                        { text: 'Continue' }
+                    ]);
+                    setRender(false);
+                    setDeleteModalVisible(false);
+                }
+                
             }).catch((err) => {
                 console.log(err);
             })
@@ -65,7 +75,7 @@ const booking = function () {
 
     const Booked = async function () {
         ID = await AsyncRetrieve();
-        let buildhttp = 'http://192.168.0.115:3303/schedule/check/' + ID;
+        let buildhttp = 'http://10.0.2.2:3303/schedule/check/' + ID;
         let arr = [];
         axios.get(buildhttp)
         .then((res) => {
@@ -82,7 +92,7 @@ const booking = function () {
         let key = 1;
         return data.map(item => {
             key = key + 1;
-            return <ScheduleTime key={key} orderID={item.ID} day={item.day} month={" " + item.month} year={" " + item.year} time={item.time} opacity={item.opacity} />
+            return <ScheduleTime key={key} orderID={item.ID} day={item.day} month={" " + item.month} year={" " + item.year} time={item.time} opacity={item.opacity} status={item.status} />
         })
     }
 
@@ -90,6 +100,7 @@ const booking = function () {
         AttemptCount = AttemptCount + 1;
         if (AttemptCount === 1) {
             if (time === 'Time' || day === 'Day' || month === 'Month' || year === 'Year' || opacity === 'Opacity') {
+                AttemptCount = 0;
                 Alert.alert('Please Fill in the Blank', 'Please Try Again', [
                     { text: 'Try Again' }
                 ]);
@@ -97,8 +108,7 @@ const booking = function () {
         }
         else if (time !== 'Time' || day !== 'Day' || month !== 'Month' || year !== 'Year' || opacity !== 'Opacity') {
             let ID = await AsyncRetrieve();
-            console.log(ID);
-            axios.post('http://192.168.0.115:3303/schedule/add', {
+            axios.post('http://10.0.2.2:3303/schedule/add', {
                 time: time,
                 day: day,
                 month: month,
@@ -106,11 +116,19 @@ const booking = function () {
                 opacity: opacity,
                 userID: ID
             }).then((res) => {
-                console.log(res.data.message);
-                setRender(true);
-                Alert.alert('Success', 'Schedule Added', [
-                    { text: 'Back' }
-                ]);
+
+                if(res.data.auth === "FALSE"){
+                    Alert.alert('Schedule Not Available', ' ', [
+                        { text: 'Try Again' }
+                    ]);
+                }else{
+                    setRender(true);
+                    AttemptCount = 0;
+                    Alert.alert('Success', 'Schedule Added', [
+                        { text: 'Back' }
+                    ]);
+                }
+                
             }).catch((error) => {
                 console.log(error)
             })

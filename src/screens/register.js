@@ -13,29 +13,54 @@ const windowWidth = Dimensions.get('window').width;
 
 const register = function({navigation}) {
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [password2, setPassword2] = useState("");
-    const [name, setName] = useState("");
+    const [username, setusername] = useState("username");
+    const [password, setPassword] = useState("password");
+    const [password2, setPassword2] = useState("password2");
+    const [name, setName] = useState("name");
 
     const addUser = function(){
-        
-        if(password !== password2){
-            Alert.alert('Password not match !','Please Try Again.',[
-                {text: 'Try Again'}
+        if(username === "username" || password === "password" || password2 === "password2" || name === "name"){
+            Alert.alert('Please fill in the blank','',[
+                {text: 'Continue'}
             ]);
         }else{
-            axios.post('http://192.168.0.115:3303/user/register', {
-                email: email,
-                password: password,
-                name: name
-            }).then(()=>{
-                console.log("Success")
-            }).catch((error)=>{
-                console.log(error);
-            })
+            if(password !== password2){
+                Alert.alert('Password not match !','Please Try Again.',[
+                    {text: 'Try Again'}
+                ]);
+            }else{
+                axios.post('http://10.0.2.2:3303/user/register', {
+                    username: username,
+                    password: password,
+                    name: name
+                }).then(()=>{
+                    Alert.alert('Registration Success','',[
+                        {text: 'Continue'}
+                    ]);
+                    navigation.navigate('login2');
+                }).catch((error)=>{
+                    console.log(error);
+                })
+            }
         }
         
+        
+    }
+
+
+    const checkusername = async function(){
+        axios.post("http://10.0.2.2:3303/user/check", {
+            username: username
+        }).then((res)=>{
+            let data = res.data.result;
+            if(data.length > 0){
+                Alert.alert('username Registered.','Try new username',[
+                    {text: 'Try Again'}
+                ]);
+            }else{
+                addUser();
+            }
+        })
     }
 
     return (
@@ -54,10 +79,10 @@ const register = function({navigation}) {
                 <View style={styles.inputContainer}>
                     <AntDesign name={"user"} size={25} color="#666666" style={styles.icon} />
                     <TextInput
-                        placeholder="Email"
+                        placeholder="username"
                         numberOfLines={1}
                         fontSize={20}
-                        onChangeText={text => setEmail(text)}
+                        onChangeText={text => setusername(text)}
                     />
                 </View>
 
@@ -95,7 +120,7 @@ const register = function({navigation}) {
                     />
                 </View>
 
-                <Button style={styles.button} onPress={ ()=>{addUser()}}>
+                <Button style={styles.button} onPress={ ()=>{checkusername()}}>
                     <Text style={styles.buttonText}>Sign Up</Text>
                 </Button>
 

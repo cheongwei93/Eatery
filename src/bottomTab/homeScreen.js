@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import Swiper from 'react-native-swiper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -6,6 +6,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Card from '../components/Card';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncRetrieve from '../components/AsyncRetrieve';
+import axios from 'axios';
+
 
 // image
 import pic1 from '../../images/Sushi/001.jpg'
@@ -18,128 +21,160 @@ import pic7 from '../../images/Sushi/007.jpg'
 import pic8 from '../../images/Sushi/008.jpg'
 import pic9 from '../../images/Sushi/009.jpg'
 
-class homeScreen extends Component {
+const homeScreen = function({navigation}) {
 
-    constructor(props){
-        super(props)
-    }
+    const [cart, setCart] = useState(0);
+    const [render, setRender] = useState(true);
+
+    React.useEffect(()=>{
+        const unsubscribe = navigation.addListener('focus', ()=>{
+            totalOrders();
+        });
+        if(render === true){
+            return unsubscribe;
+        }
+
+    },[navigation]);
+
     
-    render() {
-        return (
-            <View style={styles.container}>
-                <ScrollView style={styles.scroll}>
 
-                    <View style={styles.sliderContainer}>
-                        <Swiper height={200} autoplay={true} horizontal={true} activeDotColor='white'>
-                            <View style={styles.slide}>
-                                <Image
-                                    source={pic1}
-                                    resizeMode='cover'
-                                    style={styles.sliderImage}
-                                />
+    
+
+    //get total number of orders
+    const totalOrders = async function(){
+        let ID = await AsyncRetrieve();
+        console.log(ID);
+        let buildhttp = 'http://10.0.2.2:3303/order/total/' + ID;
+        axios.get(buildhttp)
+        .then((res)=>{
+            let total = res.data.result[0].TOTAL;
+            setCart(total);
+            setRender(false);
+        })
+    };
+
+    return (
+        <View style={styles.container}>
+            <ScrollView style={styles.scroll}>
+
+                <View style={styles.sliderContainer}>
+                    <Swiper height={200} autoplay={true} horizontal={true} activeDotColor='white'>
+                        <View style={styles.slide}>
+                            <Image
+                                source={pic1}
+                                resizeMode='cover'
+                                style={styles.sliderImage}
+                            />
+                        </View>
+                        <View style={styles.slide}>
+                            <Image
+                                source={pic2}
+                                resizeMode='cover'
+                                style={styles.sliderImage}
+                            />
+                        </View>
+                        <View style={styles.slide}>
+                            <Image
+                                source={pic3}
+                                resizeMode='cover'
+                                style={styles.sliderImage}
+                            />
+                        </View>
+
+                    </Swiper>
+                </View>
+
+
+
+            
+
+                <View style={styles.categoryContainer}>
+                    <TouchableOpacity onPress={()=>{navigation.navigate('Take Away')}}>
+                        <View style={styles.categoryIcon}>
+                            <MaterialCommunityIcons name={'food-fork-drink'} size={35} color='#FA4B3E'/>
+                        </View>
+                        <Text style={styles.categoryBtnTxt}>Take Away</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity onPress={()=>{navigation.navigate('Reservation')}}>
+                        <View style={styles.categoryIcon}>
+                            <AntDesign name={'calendar'} size={35} color='#FA4B3E' />
+                        </View>
+                        <Text style={styles.categoryBtnTxt}>Reservation</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={()=>{navigation.navigate('Cart')}}>
+                        <View style={{position: 'absolute', zIndex: 1}}>
+                            <View style={styles.badge}>
+                                <Text style={styles.badgeText}>
+                                    {cart}
+                                </Text>
                             </View>
-                            <View style={styles.slide}>
-                                <Image
-                                    source={pic2}
-                                    resizeMode='cover'
-                                    style={styles.sliderImage}
-                                />
-                            </View>
-                            <View style={styles.slide}>
-                                <Image
-                                    source={pic3}
-                                    resizeMode='cover'
-                                    style={styles.sliderImage}
-                                />
-                            </View>
-
-                        </Swiper>
-                    </View>
-
-
+                        </View>
+                        <View style={styles.categoryIcon}>
+                            <SimpleLineIcons name={'basket'} size={35} color={'#FA4B3E'}/>
+                        </View>
+                        <Text style={styles.categoryBtnTxt}>Cart</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity onPress={()=>{navigation.navigate('Check In')}}>
+                        <View style={styles.categoryIcon}>
+                            <FontAwesome5 name={'check-circle'} size={35} color='#FA4B3E' />
+                        </View>
+                        <Text style={styles.categoryBtnTxt}>Check In</Text>
+                    </TouchableOpacity>
+                    
+                </View>
 
                 
 
-                    <View style={styles.categoryContainer}>
-                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('Take Away')}}>
-                            <View style={styles.categoryIcon}>
-                                <MaterialCommunityIcons name={'food-fork-drink'} size={35} color='#FA4B3E'/>
-                            </View>
-                            <Text style={styles.categoryBtnTxt}>Take Away</Text>
-                        </TouchableOpacity>
-                        
-                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('Reservation')}}>
-                            <View style={styles.categoryIcon}>
-                                <AntDesign name={'calendar'} size={35} color='#FA4B3E' />
-                            </View>
-                            <Text style={styles.categoryBtnTxt}>Reservation</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('Cart')}}>
-                            <View style={styles.categoryIcon}>
-                                <SimpleLineIcons name={'basket'} size={35} color={'#FA4B3E'}/>
-                            </View>
-                            <Text style={styles.categoryBtnTxt}>Cart</Text>
-                        </TouchableOpacity>
-                        
-                        <TouchableOpacity onPress={()=>{this.props.navigation.navigate('Check In')}}>
-                            <View style={styles.categoryIcon}>
-                                <FontAwesome5 name={'check-circle'} size={35} color='#FA4B3E' />
-                            </View>
-                            <Text style={styles.categoryBtnTxt}>Check In</Text>
-                        </TouchableOpacity>
-                        
-                    </View>
-
-                    
 
 
+                <Text style={styles.text}>
+                    New Products
+                </Text>
 
-                    <Text style={styles.text}>
-                        New Products
-                    </Text>
+                <Card
+                    imgSource={pic4}
+                    foodName='Tempura Udon'
+                />
 
-                    <Card
-                        imgSource={pic4}
-                        foodName='Tempura Udon'
-                    />
+                <Card
+                    imgSource={pic5}
+                    foodName='Shiro Ramen'
+                />
 
-                    <Card
-                        imgSource={pic5}
-                        foodName='Shiro Ramen'
-                    />
+                <Card
+                    imgSource={pic6}
+                    foodName='Salmon Toro'
+                />
 
-                    <Card
-                        imgSource={pic6}
-                        foodName='Salmon Toro'
-                    />
+                <Text style={styles.text}>
+                    Highly Recommneded
+                </Text>
 
-                    <Text style={styles.text}>
-                        Highly Recommneded
-                    </Text>
+                <Card
+                    imgSource={pic7}
+                    foodName='Tori Katsu Don'
+                />
 
-                    <Card
-                        imgSource={pic7}
-                        foodName='Tori Katsu Don'
-                    />
+                <Card
+                    imgSource={pic8}
+                    foodName='Salmon Teriyaki Don'
+                />
 
-                    <Card
-                        imgSource={pic8}
-                        foodName='Salmon Teriyaki Don'
-                    />
-
-                    <Card
-                        imgSource={pic9}
-                        foodName='Salmon Dragon Maki'
-                    />
-                </ScrollView>
+                <Card
+                    imgSource={pic9}
+                    foodName='Salmon Dragon Maki'
+                />
+            </ScrollView>
 
 
 
 
-            </View>
-        )
-    }
+        </View>
+    )
+    
 }
 
 const styles = StyleSheet.create({
@@ -212,13 +247,26 @@ const styles = StyleSheet.create({
         height: 60,
         backgroundColor: '#fdeae7',
         borderRadius: 50,
-        marginHorizontal: 10
+        marginHorizontal: 10,
     },
     categoryBtnTxt: {
         alignSelf: 'center',
         marginTop: 5,
         color: '#de4f35',
     },
+    badge: {
+        height: 25,
+        width: 25,
+        backgroundColor: 'red',
+        borderRadius: 50,
+        marginLeft: 50
+    },
+    badgeText: {
+        color: 'white',
+        alignSelf: 'center',
+        fontWeight: 'bold',
+        fontSize: 18
+    }
 
 
 
