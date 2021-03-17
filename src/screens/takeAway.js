@@ -50,11 +50,24 @@ const takeaway = function({navigation}){
                 time: time,
                 userID: ID
             }).then((res)=>{
-                takeawayID = res.data.result.insertId;
-                Alert.alert('Time Booked', '', [
-                    { text: 'Continue' }
-                ]);
-                setRender(true);
+                console.log(res.data);
+                if(res.data.auth === "FALSE"){
+                    Alert.alert('Schedule Not Available', ' ', [
+                        { text: 'Try Again' }
+                    ]);
+                }else{
+                    setRender(true);
+                    takeawayID = res.data.result.insertId;
+                    Alert.alert('Success', 'Schedule Added', [
+                        { text: 'Back' }
+                    ]);
+                }
+
+                // takeawayID = res.data.result.insertId;
+                // Alert.alert('Time Booked', '', [
+                //     { text: 'Continue' }
+                // ]);
+                // setRender(true);
             })
         }
         
